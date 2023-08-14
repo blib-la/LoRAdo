@@ -13,12 +13,20 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Image from "next/image";
 import { ImageData } from "@/types";
 import { ChangeEventHandler } from "react";
+import dynamic from "next/dynamic";
 
+const FaceDetectionImage = dynamic(
+  () => import("@/components/FaceDetectionImage"),
+  {
+    ssr: false,
+  },
+);
 interface ImageItemProps {
   demo?: boolean;
   image: ImageData;
   onRemove?: () => void;
   onOpen?: () => void;
+  onFace?: (hasFace: boolean) => void;
   onCaptionChange?: ChangeEventHandler<HTMLTextAreaElement>;
 }
 
@@ -27,12 +35,15 @@ export default function ImageItem({
   demo,
   onRemove,
   onOpen,
+  onFace,
   onCaptionChange,
 }: ImageItemProps) {
+  const hasGoodSize = Math.min(image.width, image.height) >= 1536;
+  console.log();
   return (
     <Card
       variant="soft"
-      color={Math.min(image.width, image.height) < 1536 ? "warning" : "neutral"}
+      color={hasGoodSize && image.hasFace ? "neutral" : "danger"}
       sx={{
         breakInside: "avoid",
         opacity: demo ? 0.25 : undefined,
@@ -75,7 +86,7 @@ export default function ImageItem({
         }}
         onClick={onOpen}
       >
-        <Image
+        <FaceDetectionImage
           src={image.data}
           alt={image.name}
           width={image.width}
@@ -83,9 +94,8 @@ export default function ImageItem({
           style={{
             width: "100%",
             height: "auto",
-            objectFit: "cover",
-            objectPosition: "center",
           }}
+          onFace={onFace}
         />
       </Box>
       <FormControl>

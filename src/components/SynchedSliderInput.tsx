@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { forwardRef, ChangeEvent, ForwardRefRenderFunction } from "react";
 import {
   Box,
   FormControl,
@@ -18,16 +18,13 @@ interface SyncedSliderInputProps {
   helperText?: string;
 }
 
-export default function SyncedSliderInput({
-  value,
-  name,
-  onChange,
-  min = 1,
-  max = 30,
-  label,
-  helperText,
-  ...props
-}: SyncedSliderInputProps) {
+const SyncedSliderInput: ForwardRefRenderFunction<
+  HTMLInputElement,
+  SyncedSliderInputProps
+> = (
+  { value, name, onChange, min = 1, max = 30, label, helperText, ...props },
+  ref,
+) => {
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
     onChange(newValue as number);
   };
@@ -53,6 +50,7 @@ export default function SyncedSliderInput({
           />
           <Input
             {...props}
+            ref={ref}
             type="number"
             name={name}
             value={value}
@@ -64,4 +62,6 @@ export default function SyncedSliderInput({
       </FormControl>
     </Box>
   );
-}
+};
+
+export default forwardRef(SyncedSliderInput);

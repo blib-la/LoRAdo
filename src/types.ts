@@ -6,4 +6,18 @@ export interface ImageData {
   size: number;
   width: number;
   height: number;
+  hasFace?: boolean;
+}
+
+export interface FormDataModel {
+  checkpoint: string;
+  subject: string;
+  className: string;
+  epochs: number;
+  crop: boolean;
+  sample: boolean;
+  lowVRAM: boolean;
+  regularisation: boolean;
+  files: File[];
+  filename: string;
 }
