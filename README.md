@@ -12,16 +12,18 @@ With LoRAdo, creating datasets for image training is straightforward and efficie
 
 **Screenshots**
 
-<figure align="center">
+<p align="center">
 <img src="assets/ui.png" width="600" alt="user interface">
-<figcaption>The user interface</figcaption>
-</figure>
-<figure align="center">
-<img src="assets/folder.png" width="300" alt="folders">
-<figcaption>The prpared folder</figcaption>
-</figure>
+<br/>
+The user interface
+</p>
 
- 
+<p align="center">
+<img src="assets/folder.png" width="300" alt="folders">
+<br/>
+The prepared folder
+</p>
+
 ## Getting Started with LoRAdo 🚀
 
 1. **Prerequisites:**
@@ -56,12 +58,11 @@ With LoRAdo, creating datasets for image training is straightforward and efficie
 
 ---
 
-
 Example images via [@anamnesis33](https://unsplash.com/@anamnesis33)
 
-| Image                                                                                                            | Link                                    |
-|------------------------------------------------------------------------------------------------------------------| --------------------------------------- |
-| [<img src="public/images/anamnesis33/example (1).jpg" width="100">](public/images/anamnesis33/example%20(1).jpg) | https://unsplash.com/photos/mqcYKihgfAo |
-| [<img src="public/images/anamnesis33/example (2).jpg" width="100">](public/images/anamnesis33/example%20(2).jpg) | https://unsplash.com/photos/06TuQM7RSP4 |
-| [<img src="public/images/anamnesis33/example (3).jpg" width="100">](public/images/anamnesis33/example%20(3).jpg) | https://unsplash.com/photos/AUJhl146mBY |
-| [<img src="public/images/anamnesis33/example (4).jpg" width="100">](public/images/anamnesis33/example%20(4).jpg) | https://unsplash.com/photos/8OWttYqN47I |
+| Image                                                                                                              | Link                                    |
+| ------------------------------------------------------------------------------------------------------------------ | --------------------------------------- |
+| [<img src="public/images/anamnesis33/example (1).jpg" width="100">](<public/images/anamnesis33/example%20(1).jpg>) | https://unsplash.com/photos/mqcYKihgfAo |
+| [<img src="public/images/anamnesis33/example (2).jpg" width="100">](<public/images/anamnesis33/example%20(2).jpg>) | https://unsplash.com/photos/06TuQM7RSP4 |
+| [<img src="public/images/anamnesis33/example (3).jpg" width="100">](<public/images/anamnesis33/example%20(3).jpg>) | https://unsplash.com/photos/AUJhl146mBY |
+| [<img src="public/images/anamnesis33/example (4).jpg" width="100">](<public/images/anamnesis33/example%20(4).jpg>) | https://unsplash.com/photos/8OWttYqN47I |
