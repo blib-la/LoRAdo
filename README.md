@@ -52,9 +52,9 @@ With LoRAdo, creating datasets for image training is straightforward and efficie
 
 Example images via [@anamnesis33](https://unsplash.com/@anamnesis33)
 
-| Image                                                                                                        | Link                                    |
-| ------------------------------------------------------------------------------------------------------------ | --------------------------------------- |
-| [![Example 1](<public/images/anamnesis33/example%20(1).jpg>)](<public/images/anamnesis33/example%20(1).jpg>) | https://unsplash.com/photos/mqcYKihgfAo |
-| [![Example 2](<public/images/anamnesis33/example%20(2).jpg>)](<public/images/anamnesis33/example%20(2).jpg>) | https://unsplash.com/photos/06TuQM7RSP4 |
-| [![Example 3](<public/images/anamnesis33/example%20(3).jpg>)](<public/images/anamnesis33/example%20(3).jpg>) | https://unsplash.com/photos/AUJhl146mBY |
-| [![Example 4](<public/images/anamnesis33/example%20(4).jpg>)](<public/images/anamnesis33/example%20(4).jpg>) | https://unsplash.com/photos/8OWttYqN47I |
+| Image                                                                                                            | Link                                    |
+|------------------------------------------------------------------------------------------------------------------| --------------------------------------- |
+| [<img src="public/images/anamnesis33/example (1).jpg" width="100">](public/images/anamnesis33/example%20(1).jpg) | https://unsplash.com/photos/mqcYKihgfAo |
+| [<img src="public/images/anamnesis33/example (2).jpg" width="100">](public/images/anamnesis33/example%20(2).jpg) | https://unsplash.com/photos/06TuQM7RSP4 |
+| [<img src="public/images/anamnesis33/example (3).jpg" width="100">](public/images/anamnesis33/example%20(3).jpg) | https://unsplash.com/photos/AUJhl146mBY |
+| [<img src="public/images/anamnesis33/example (4).jpg" width="100">](public/images/anamnesis33/example%20(4).jpg) | https://unsplash.com/photos/8OWttYqN47I |
