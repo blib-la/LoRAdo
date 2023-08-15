@@ -36,3 +36,7 @@ next-env.d.ts
 
 # intellij
 .idea
+
+# training data
+/training/*
+!/training/.gitkeep

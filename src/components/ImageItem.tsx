@@ -8,13 +8,14 @@ import {
   FormControl,
   FormLabel,
   FormHelperText,
+  CircularProgress,
 } from "@mui/joy";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Image from "next/image";
 import { ImageData } from "@/types";
-import { ChangeEventHandler } from "react";
+import { ChangeEventHandler, useState } from "react";
 import dynamic from "next/dynamic";
-
+import Checkicon from "@mui/icons-material/Check";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 const FaceDetectionImage = dynamic(
   () => import("@/components/FaceDetectionImage"),
   {
@@ -38,8 +39,10 @@ export default function ImageItem({
   onFace,
   onCaptionChange,
 }: ImageItemProps) {
+  const [faceDetection, setFaceDetection] = useState(false);
+
   const hasGoodSize = Math.min(image.width, image.height) >= 1536;
-  console.log();
+
   return (
     <Card
       variant="soft"
@@ -52,9 +55,22 @@ export default function ImageItem({
       }}
     >
       <div>
-        <Typography level="title-md">{image.name}</Typography>
+        <Typography
+          level="title-md"
+          startDecorator={
+            !faceDetection ? (
+              <CircularProgress size="sm" />
+            ) : image.uploaded || demo ? (
+              <Checkicon />
+            ) : (
+              <FileUploadIcon />
+            )
+          }
+        >
+          {image.name}
+        </Typography>
 
-        {!demo && (
+        {!demo && !image.uploaded && (
           <IconButton
             aria-label="Remove"
             size="sm"
@@ -95,7 +111,12 @@ export default function ImageItem({
             width: "100%",
             height: "auto",
           }}
-          onFace={onFace}
+          onFace={(hasFace) => {
+            setFaceDetection(true);
+            if (onFace) {
+              onFace(hasFace);
+            }
+          }}
         />
       </Box>
       <FormControl>

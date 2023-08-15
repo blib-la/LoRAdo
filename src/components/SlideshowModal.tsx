@@ -6,6 +6,7 @@ import {
   IconButton,
   Typography,
   Button,
+  Textarea,
 } from "@mui/joy";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -14,20 +15,16 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import Image from "next/image";
 import { useState } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { ImageData } from "@/types";
 interface SlideshowModalProps {
-  images: Array<{
-    data: string;
-    name: string;
-    size: number;
-    width: number;
-    height: number;
-  }>;
+  images: Array<ImageData>;
   currentIndex: number | null;
   isOpen: boolean;
   onClose: () => void;
   onNext: () => void;
   onPrev: () => void;
   onDelete: (index: number) => void;
+  onCaptionChange: (index: number, value: string) => void;
 }
 
 export default function SlideshowModal({
@@ -37,9 +34,10 @@ export default function SlideshowModal({
   onClose,
   onNext,
   onPrev,
+  onCaptionChange,
   onDelete,
 }: SlideshowModalProps) {
-  const currentImage = images[currentIndex || 0];
+  const currentImage = images[currentIndex ?? 0];
   const [confirm, setConfirm] = useState(false);
 
   return (
@@ -53,10 +51,14 @@ export default function SlideshowModal({
       <Sheet
         variant="outlined"
         sx={{
-          width: "85vw",
+          width: "calc(100vw - 96px)",
+          maxWidth: 1440,
+          height: "calc(100vh - 96px)",
           borderRadius: "md",
           p: 3,
           boxShadow: "lg",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <ModalClose variant="outlined" onClick={onClose} />
@@ -78,6 +80,8 @@ export default function SlideshowModal({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            overflow: "hidden",
+            flex: 1,
           }}
         >
           <IconButton
@@ -89,24 +93,45 @@ export default function SlideshowModal({
             <ArrowBackIcon />
           </IconButton>
           {currentImage && (
-            <Box component="figure" sx={{ textAlign: "center", width: "100%" }}>
-              <Image
-                src={currentImage.data}
-                alt={`Image ${currentIndex}`}
-                width={currentImage.width}
-                height={currentImage.height}
-                style={{
-                  width: "100%",
-                  maxHeight: "80vh",
-                  objectFit: "contain",
-                  objectPosition: "center",
+            <Box
+              component="figure"
+              sx={{
+                textAlign: "center",
+                width: "100%",
+                height: "100%",
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden",
+              }}
+            >
+              <Box
+                sx={{
+                  flex: 1,
+                  overflow: "hidden",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
-              />
+              >
+                <Image
+                  src={currentImage.data}
+                  alt={`Image ${currentIndex}`}
+                  width={currentImage.width}
+                  height={currentImage.height}
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    height: "auto",
+                    width: "auto",
+                  }}
+                />
+              </Box>
               <Typography level="body-sm" component="figcaption" sx={{ mb: 4 }}>
                 {currentImage.name} - Size: {currentImage.size} bytes |
                 Dimensions: {currentImage.width}x{currentImage.height}
               </Typography>
-              <Box sx={{ display: "flex", gap: 2 }}>
+              <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
                 {confirm ? (
                   <>
                     <Button
@@ -140,6 +165,17 @@ export default function SlideshowModal({
                     Remove
                   </Button>
                 )}
+                <Box sx={{ flex: 1 }}>
+                  <Textarea
+                    key={currentIndex}
+                    value={currentImage.caption}
+                    onChange={(event) => {
+                      if (onCaptionChange && currentIndex !== null) {
+                        onCaptionChange(currentIndex, event.target.value);
+                      }
+                    }}
+                  />
+                </Box>
               </Box>
             </Box>
           )}

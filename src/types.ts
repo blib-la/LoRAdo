@@ -7,6 +7,7 @@ export interface ImageData {
   width: number;
   height: number;
   hasFace?: boolean;
+  uploaded?: boolean;
 }
 
 export interface FormDataModel {

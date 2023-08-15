@@ -1,6 +1,7 @@
 export const exampleImages = [
   {
     id: "1",
+    hasFace: true,
     caption:
       "photo of a woman with medium long auburn hair, wearing a white dress with burgundy floral pattern, from side, looking at the viewer, leaning against a white wall",
     name: "Example woman 1",
@@ -11,6 +12,7 @@ export const exampleImages = [
   },
   {
     id: "2",
+    hasFace: true,
     caption:
       "photo of a woman with auburn hair tied up, wearing a dark blue dress with floral and butterfly pattern, looking to the side, leaning against a boulder",
     name: "Example woman 2",
@@ -21,6 +23,7 @@ export const exampleImages = [
   },
   {
     id: "3",
+    hasFace: true,
     caption:
       "photo of a woman with shoulder long auburn hair, wearing a turquoise turtleneck sweater, blue jeans and white sneakers, looking at the viewer, sitting on a stairway",
     name: "Example woman 3",
@@ -31,6 +34,7 @@ export const exampleImages = [
   },
   {
     id: "4",
+    hasFace: true,
     caption:
       "photo of a woman with auburn tied up hair, wearing a red dress with white blossom pattern, hand against neck, standing near a road with cars, looking at the viewer, depth of field",
     name: "Example woman 4",

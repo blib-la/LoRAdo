@@ -2,6 +2,7 @@ import {
   Alert,
   Box,
   Button,
+  Chip,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -23,7 +24,7 @@ import { traverseFileTree } from "@/utils/traverseFileTree";
 import { FormDataModel, ImageData } from "@/types";
 import { exampleImages } from "@/data/exampleImages";
 import { Controller, useForm } from "react-hook-form";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 export default function Home() {
   const {
@@ -46,6 +47,9 @@ export default function Home() {
       files: [],
     },
   });
+  const [loading, setLoading] = useState(false);
+  const [directory, setDirectory] = useState("");
+  const [error, setError] = useState<Error | null>(null);
   const [images, setImages] = useState<Array<ImageData>>([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState<number | null>(
@@ -104,7 +108,7 @@ export default function Home() {
     }
   };
 
-  const handleCaptionChange = (value: string, imageIndex: number) => {
+  const handleCaptionChange = (imageIndex: number, value: string) => {
     setImages((prevImages) => {
       return prevImages.map((image, index) =>
         index === imageIndex ? { ...image, caption: value } : image,
@@ -120,6 +124,7 @@ export default function Home() {
   };
 
   const onSubmit = async (data: Omit<FormDataModel, "files">) => {
+    setLoading(true);
     const formData = new FormData();
     formData.append("checkpoint", data.checkpoint);
     formData.append("subject", data.subject);
@@ -131,33 +136,69 @@ export default function Home() {
     formData.append("lowVRAM", data.lowVRAM.toString());
     formData.append("regularisation", data.regularisation.toString());
 
-    images.forEach((image, index) => {
-      const byteCharacters = atob(image.data.split(",")[1]);
-      const byteArrays = [];
+    try {
+      const response = await axios.post<{ baseDir: string }>(
+        "/api/prepare",
+        formData,
+      );
 
-      for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-        const slice = byteCharacters.slice(offset, offset + 512);
+      const imagePromises = images.map(async (image, index) => {
+        const counter = index + 1;
+        const imageData = new FormData();
+        const byteCharacters = atob(image.data.split(",")[1]);
+        const byteArrays = [];
 
-        const byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
+        for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+          const slice = byteCharacters.slice(offset, offset + 512);
+
+          const byteNumbers = new Array(slice.length);
+          for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+          }
+
+          const byteArray = new Uint8Array(byteNumbers);
+          byteArrays.push(byteArray);
         }
 
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-      }
+        const blob = new Blob(byteArrays, { type: "image/jpeg" });
+        imageData.append(`file`, blob, image.name);
+        imageData.append(
+          `caption`,
+          image.caption ?? `photo of ${data.subject} ${data.className}`,
+        );
+        imageData.append(`filename`, `${data.subject} (${counter})`);
+        imageData.append("baseDir", response.data.baseDir);
+        imageData.append("subject", data.subject);
+        imageData.append("className", data.className);
+        imageData.append("crop", data.crop.toString());
+        imageData.append("counter", counter.toString());
 
-      const blob = new Blob(byteArrays, { type: "image/jpeg" }); // Assuming the image is JPEG. Adjust accordingly
-      formData.append(`files_${index}`, blob, image.name);
-      formData.append(`caption_${index}`, image.caption); // Append the caption for the image
-    });
-    try {
-      const response = await axios.post("/api/prepare", formData);
-      console.log(response.data);
+        // Now sending each image separately to a different endpoint
+        const imageResponse = await axios.post("/api/upload-image", imageData);
+        setImages((prevState) =>
+          prevState.map((prevImage) =>
+            prevImage.id === image.id
+              ? { ...prevImage, uploaded: true }
+              : prevImage,
+          ),
+        );
+        return imageResponse;
+      });
+
+      // Waiting for all image uploads to finish
+      const imageResponses = await Promise.all(imagePromises);
+      console.log(imageResponses.map((resp) => resp.data));
+      setDirectory(response.data.baseDir);
     } catch (error) {
       console.error("Error sending data: ", error);
+      setError(error as Error | AxiosError);
+    } finally {
+      setLoading(false);
     }
   };
+
+  const preferredLength = 8;
+  const secondaryLength = 5;
   return (
     <Layout>
       <SlideshowModal
@@ -168,6 +209,7 @@ export default function Home() {
         onNext={nextImage}
         onPrev={prevImage}
         onDelete={handleRemove}
+        onCaptionChange={handleCaptionChange}
       />
       <Box component="form" sx={{ my: 2 }} onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2} columns={{ xs: 1, md: 2 }}>
@@ -317,7 +359,7 @@ export default function Home() {
                         name="regularisation"
                         control={control}
                         render={({ field }) => (
-                          <Switch sx={{ ml: 1 }} {...field} />
+                          <Switch disabled sx={{ ml: 1 }} {...field} />
                         )}
                       />
                     }
@@ -325,22 +367,47 @@ export default function Home() {
                     Regularisation
                   </Typography>
                   <FormHelperText sx={{ mt: 1 }}>
-                    Do you want to use regularisation images during training?
-                    (more flexible but twice as slow)
+                    <Box>
+                      <Chip
+                        size="sm"
+                        color="primary"
+                        variant="solid"
+                        sx={{ mr: 1 }}
+                      >
+                        WIP
+                      </Chip>
+                      Do you want to use regularisation images during training?
+                      (more flexible but twice as slow)
+                    </Box>
                   </FormHelperText>
                 </Grid>
               </Grid>
               <Box sx={{ mt: 4 }}>
-                <Button fullWidth type="submit" disabled={images.length === 0}>
+                <Button
+                  fullWidth
+                  loading={loading}
+                  type="submit"
+                  disabled={images.length === 0 || loading}
+                >
                   Prepare
                 </Button>
               </Box>
+              {directory && (
+                <Alert variant="soft" color="success">
+                  <div>
+                    <Typography level="body-sm">
+                      The training data has been created at:
+                    </Typography>
+                    <Typography level="body-md">{directory}</Typography>
+                  </div>
+                </Alert>
+              )}
               <Alert
                 variant="soft"
                 color={
-                  images.length >= 10
+                  images.length >= preferredLength
                     ? "success"
-                    : images.length >= 5
+                    : images.length >= secondaryLength
                     ? "warning"
                     : "danger"
                 }
@@ -351,9 +418,9 @@ export default function Home() {
                     variant="solid"
                     disabled={images.length === 0}
                     color={
-                      images.length >= 10
+                      images.length >= preferredLength
                         ? "success"
-                        : images.length >= 5
+                        : images.length >= secondaryLength
                         ? "warning"
                         : "danger"
                     }
@@ -366,9 +433,14 @@ export default function Home() {
                 }
               >
                 Using {images.length} image{images.length === 1 ? "" : "s"}.
-                {images.length < 5 && images.length > 0 && (
+                {images.length < secondaryLength && images.length > 0 && (
                   <Typography level="body-xs">
-                    Less images mean less versatility.
+                    Less images will create less flexible LoRAs.
+                  </Typography>
+                )}
+                {images.length < preferredLength && images.length >= 5 && (
+                  <Typography level="body-xs">
+                    We recommend at least {preferredLength} mages.
                   </Typography>
                 )}
                 {images.length === 0 && (
@@ -405,7 +477,7 @@ export default function Home() {
               openModal(index);
             }}
             onCaptionChange={(event) => {
-              handleCaptionChange(event.target.value, index);
+              handleCaptionChange(index, event.target.value);
             }}
           />
         ))}
@@ -418,6 +490,7 @@ export default function Home() {
                 caption: image.caption,
                 id: image.id,
                 data: image.src,
+                hasFace: image.hasFace,
                 width: image.width,
                 height: image.height,
                 name: image.name,
