@@ -28,7 +28,6 @@ With LoRAdo, creating datasets for image training is straightforward and
 efficient.
 
 **Screenshots**
-
 <p align="center">
 <img src="assets/ui.png" width="600" alt="user interface">
 <br/>
@@ -45,6 +44,12 @@ View and  configure images
 <img src="assets/folder.png" width="300" alt="folders">
 <br/>
 The prepared folder
+</p>
+
+<p align="center">
+<img src="assets/crop.png" width="600" alt="cropped images">
+<br/>
+The cropped images
 </p>
 
 ## Features

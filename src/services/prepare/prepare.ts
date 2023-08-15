@@ -1,90 +1,80 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { ensureDirExists, getClosestSize, getImageDimensions } from "./utils";
+
 import { cropImageToFace, loadModels } from "./crop";
+import { ensureDirExists, getClosestSize, getImageDimensions } from "./utils";
 
 export async function prepareImage({
-  crop = false,
-  image,
-  repeats = 1,
-  zoomLevels = [0],
-  className,
-  subject,
-  outDir,
-  counter,
-  sizes,
+	crop = false,
+	image,
+	repeats = 1,
+	zoomLevels = [0],
+	className,
+	subject,
+	outDir,
+	counter,
+	sizes,
 }: {
-  crop?: boolean;
-  counter: number;
-  image: string;
-  repeats: number;
-  zoomLevels?: number[];
-  className: string;
-  subject: string;
-  outDir: string;
-  sizes: [number, number][];
+	crop?: boolean;
+	counter: number;
+	image: string;
+	repeats: number;
+	zoomLevels?: number[];
+	className: string;
+	subject: string;
+	outDir: string;
+	sizes: [number, number][];
 }) {
-  await loadModels();
+	await loadModels();
 
-  const outFolderName = path.join(
-    outDir,
-    "img",
-    `${repeats}_${subject} ${className}`,
-  );
+	const outFolderName = path.join(outDir, "img", `${repeats}_${subject} ${className}`);
 
-  await ensureDirExists(outFolderName);
+	await ensureDirExists(outFolderName);
 
-  const imageInfo = await getImageDimensions(image);
-  let caption: string;
-  try {
-    caption = await fs.readFile(image.replace(/\.jpe?g$/, ".txt"), "utf-8");
-  } catch {
-    caption = `portrait photo of ${subject} ${className}, best quality`;
-  }
-  const requestedSizes = crop
-    ? sizes
-    : [
-        getClosestSize(
-          { height: imageInfo.height!, width: imageInfo.width! },
-          sizes,
-        ) ?? [1024, 1024],
-      ];
-  const failed: string[] = [];
-  let localCounter = 0;
-  for (const [width, height] of requestedSizes) {
-    for (const zoomLevel of zoomLevels) {
-      if (!failed.includes(image)) {
-        try {
-          const result = await cropImageToFace(
-            image,
-            { width, height },
-            zoomLevel,
-          );
-          ++localCounter;
-          const imageId = `${counter.toString().padStart(4, "0")}.${localCounter
-            .toString()
-            .padStart(4, "0")}`;
-          const outputPath = path.join(
-            outFolderName,
-            `${subject} (${imageId}).png`,
-          );
-          const captionPath = path.join(
-            outFolderName,
-            `${subject} (${imageId}).txt`,
-          );
+	const imageInfo = await getImageDimensions(image);
+	let caption: string;
+	try {
+		caption = await fs.readFile(image.replace(/\.jpe?g$/, ".txt"), "utf-8");
+	} catch {
+		caption = `portrait photo of ${subject} ${className}, best quality`;
+	}
 
-          await fs.writeFile(outputPath, result);
-          await fs.writeFile(captionPath, caption);
-        } catch (error) {
-          failed.push(image);
-          console.log(`Failed on image:`, image);
-        }
-      }
-    }
-  }
+	const requestedSizes = crop
+		? sizes
+		: [
+				getClosestSize({ height: imageInfo.height!, width: imageInfo.width! }, sizes) ?? [
+					1024, 1024,
+				],
+		  ];
+	const failed: string[] = [];
+	let localCounter = 0;
+	for (const [width, height] of requestedSizes) {
+		for (const zoomLevel of zoomLevels) {
+			if (!failed.includes(image)) {
+				try {
+					// eslint-disable-next-line no-await-in-loop
+					const result = await cropImageToFace(image, { width, height }, zoomLevel);
+					++localCounter;
+					const imageId = `${counter.toString().padStart(4, "0")}.${localCounter
+						.toString()
+						.padStart(4, "0")}`;
+					const outputPath = path.join(outFolderName, `${subject} (${imageId}).png`);
+					const captionPath = path.join(outFolderName, `${subject} (${imageId}).txt`);
+
+					// eslint-disable-next-line no-await-in-loop
+					await fs.writeFile(outputPath, result);
+					// eslint-disable-next-line no-await-in-loop
+					await fs.writeFile(captionPath, caption);
+				} catch (error) {
+					failed.push(image);
+					console.log(`Failed on image:`, image);
+				}
+			}
+		}
+	}
 }
 /*
-let counter = 0;
+Let counter = 0;
 const images = Array.from(
   { length: 30 },
   (_, index) => `./images/anamnesis33 (${index + 1}).jpg`,

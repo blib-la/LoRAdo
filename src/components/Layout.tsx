@@ -2,13 +2,13 @@ import { Container } from "@mui/joy";
 import { ReactNode } from "react";
 
 interface LayoutProps {
-  children?: ReactNode;
+	children?: ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
-  return (
-    <Container component="main" sx={{ my: 8 }}>
-      {children}
-    </Container>
-  );
+	return (
+		<Container component="main" sx={{ my: 8 }}>
+			{children}
+		</Container>
+	);
 }

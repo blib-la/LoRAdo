@@ -1,3 +1,51 @@
 {
-  "extends": "next/core-web-vitals"
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "extends": ["typescript", "eslint:recommended", "xo", "plugin:prettier/recommended"],
+  "env": {
+    "browser": true,
+    "es2022": true,
+    "jest": true,
+    "node": true
+  },
+  "globals": {
+    "BufferEncoding": "readonly"
+  },
+  "plugins": ["@typescript-eslint", "unicorn", "unused-imports", "import", "jest", "prettier"],
+  "ignorePatterns": ["*.d.ts"],
+  "rules": {
+    "import/order": [
+      "error",
+      {
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "newlines-between": "always"
+      }
+    ],
+    "@typescript-eslint/no-explicit-any": "warn",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
+    ],
+    "curly": "error",
+    "no-nested-ternary": "error",
+    "no-multiple-empty-lines": "error",
+    "object-curly-spacing": ["error", "always"],
+    "prettier/prettier": "error",
+    "arrow-body-style": ["error", "as-needed"],
+    "@typescript-eslint/consistent-type-imports": "off"
+  },
+  "overrides": [
+    {
+      "files": "types.ts",
+      "rules": {
+        "no-unused-vars": "off"
+      }
+    }
+  ]
 }
