@@ -11,10 +11,17 @@ Welcome to LoRAdo. This toolkit is designed to streamline the process of LoRAs i
 With LoRAdo, creating datasets for image training is straightforward and efficient.
 
 **Screenshots**
+
 <p align="center">
 <img src="assets/ui.png" width="600" alt="user interface">
 <br/>
 The user interface
+</p>
+
+<p align="center">
+<img src="assets/slideshow.png" width="600" alt="slideshow">
+<br/>
+View and  configure images
 </p>
 
 <p align="center">
