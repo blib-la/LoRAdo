@@ -30,7 +30,7 @@
     "@mui/material": "^5.14.5",
     "@tensorflow/tfjs": "^4.10.0",
     "@tensorflow/tfjs-backend-wasm": "^4.10.0",
-    "@tensorflow/tfjs-node": "^4.10.0",
+    "@tensorflow/tfjs-node": "3.18.0",
     "@types/formidable": "^3.4.1",
     "@types/node": "20.5.0",
     "@types/react": "18.2.20",

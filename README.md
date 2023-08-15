@@ -80,8 +80,9 @@ The cropped images
 
 1. **Prerequisites:**
 
-    - Ensure you have `node.js (v18+)` installed. If not, you can download it from
+    - Ensure you have `node.js (v18.x.x)` installed. If not, you can download it from
       [Node.js official site](https://nodejs.org/).
+    - There is an open issue with tensorflow. Please make sure to install v18 (not above). THe recommended version can be found in [.nvmrc](.nvmrc)
 
 2. **Clone and Install Dependencies:**
 
