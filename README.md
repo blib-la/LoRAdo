@@ -36,31 +36,34 @@ caption files. This UI offers an easy way to create LoRAs without overthinking i
 
 
 ## Screenshots
-
-<p align="center">
-<img src="assets/ui.png" width="600" alt="user interface">
+<table>
+<tr>
+<td align="center">
+<img src="assets/ui.png" width="300" alt="user interface">
 <br/>
 The user interface
-</p>
+</td>
 
-<p align="center">
-<img src="assets/slideshow.png" width="600" alt="slideshow">
+<td align="center">
+<img src="assets/slideshow.png" width="300" alt="slideshow">
 <br/>
 View and  configure images
-</p>
-
-<p align="center">
+</td>
+</tr>
+<tr>
+<td align="center">
 <img src="assets/folder.png" width="300" alt="folders">
 <br/>
 The prepared folder
-</p>
+</td>
 
-<p align="center">
-<img src="assets/crop.png" width="600" alt="cropped images">
+<td align="center">
+<img src="assets/crop.png" width="300" alt="cropped images">
 <br/>
 The cropped images
-</p>
-
+</td>
+</tr>
+</table>
 
 ## Features
 
