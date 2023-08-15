@@ -2,7 +2,8 @@
 
 [![Discord](https://img.shields.io/discord/1091306623819059300?color=7289da&label=Discord&logo=discord&logoColor=fff&style=for-the-badge)](https://discord.com/invite/m3TBB9XEkb)
 
-Prepare datasets for [Kohya_ss](https://github.com/bmaltais/kohya_ss/) (a UI for https://github.com/kohya-ss/sd-scripts.)
+Prepare datasets for [Kohya_ss](https://github.com/bmaltais/kohya_ss/) (a UI for
+https://github.com/kohya-ss/sd-scripts.)
 
 > We plan to integrate training directly into this tool
 
@@ -16,9 +17,15 @@ Prepare datasets for [Kohya_ss](https://github.com/bmaltais/kohya_ss/) (a UI for
 
 ## Intro
 
-Welcome to LoRAdo. This toolkit is designed to streamline the process of LoRAs image generation. Suitable for both beginners and experienced developers, it simplifies dataset creation. Initially designed with portraits in mind, LoRAdo is adaptable and works well for various subjects. Key features include face detection and user-friendly cropping tools, ensuring a practical balance between user experience and results.
+Welcome to LoRAdo. This toolkit is designed to streamline the process of LoRAs
+image generation. Suitable for both beginners and experienced developers, it
+simplifies dataset creation. Initially designed with portraits in mind, LoRAdo
+is adaptable and works well for various subjects. Key features include face
+detection and user-friendly cropping tools, ensuring a practical balance between
+user experience and results.
 
-With LoRAdo, creating datasets for image training is straightforward and efficient.
+With LoRAdo, creating datasets for image training is straightforward and
+efficient.
 
 **Screenshots**
 
@@ -49,12 +56,12 @@ The prepared folder
 - [Kohya_ss (UI)](https://github.com/bmaltais/kohya_ss/) config creator
 - Regularisation image tools (WIP)
 
-
 ## Getting Started with LoRAdo
 
 1. **Prerequisites:**
 
-   - Ensure you have `node.js (v18+)` installed. If not, you can download it from [Node.js official site](https://nodejs.org/).
+   - Ensure you have `node.js (v18+)` installed. If not, you can download it
+     from [Node.js official site](https://nodejs.org/).
 
 2. **Clone and Install Dependencies:**
 
@@ -71,16 +78,21 @@ The prepared folder
    npm run start
    ```
 
-   Your app should now be running on [http://localhost:3000](http://localhost:3000). Navigate to this URL in your browser to explore the LoRAdo UI.
+   Your app should now be running on
+   [http://localhost:3000](http://localhost:3000). Navigate to this URL in your
+   browser to explore the LoRAdo UI.
 
 4. **Using LoRAdo:**
 
    - **Step 1:** Upload your desired image or images.
-   - **Step 2:** Utilize the in-built face detection for quick crops or adjust as per your requirements.
-   - **Step 3:** With a single click, transform your images into a ready-to-use dataset for [Kohya_ss](https://github.com/bmaltais/kohya_ss/)!
+   - **Step 2:** Utilize the in-built face detection for quick crops or adjust
+     as per your requirements.
+   - **Step 3:** With a single click, transform your images into a ready-to-use
+     dataset for [Kohya_ss](https://github.com/bmaltais/kohya_ss/)!
 
-5. **Feedback and Support:**
-   Encountered an issue or have a suggestion? Join our [Discord community](https://discord.com/invite/m3TBB9XEkb) or open an issue on GitHub. We'd love to hear from you!
+5. **Feedback and Support:** Encountered an issue or have a suggestion? Join our
+   [Discord community](https://discord.com/invite/m3TBB9XEkb) or open an issue
+   on GitHub. We'd love to hear from you!
 
 ---
 
