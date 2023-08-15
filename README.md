@@ -14,7 +14,7 @@ https://github.com/kohya-ss/sd-scripts.)
 - [Screenshots](#screenshots)
 - [Features](#features)
 - [Getting Started with LoRAdo](#getting-started-with-lorado)
-- [Generation examples using datasets that were prepared with this tool/approach](#generation-examples-using-datasets-that-were-prepared-with-this-toolapproach)
+- [Generation examples](#generation-examples)
 
 <!-- tocstop -->
 
@@ -130,7 +130,6 @@ These examples were generated from a LoRA, trained on a dataset that was prepare
 [<img src="assets/generations/example-2.png" width="150">](assets/generations/example-2.png)
 [<img src="assets/generations/example-3.png" width="150">](assets/generations/example-3.png)
 [<img src="assets/generations/example-4.png" width="150">](assets/generations/example-4.png)
-[<img src="assets/generations/example-5.png" width="150">](assets/generations/example-5.png)
 [<img src="assets/generations/example-6.png" width="150">](assets/generations/example-6.png)
 [<img src="assets/generations/example-7.png" width="150">](assets/generations/example-7.png)
 [<img src="assets/generations/example-8.png" width="150">](assets/generations/example-8.png)
