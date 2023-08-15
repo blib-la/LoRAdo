@@ -35,7 +35,6 @@
     "@types/node": "20.5.0",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
-    "@types/unsplash-js": "^7.0.0",
     "@vladmandic/face-api": "^1.7.12",
     "axios": "^1.4.0",
     "dialog-node": "^0.2.1",
