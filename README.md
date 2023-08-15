@@ -14,6 +14,8 @@ https://github.com/kohya-ss/sd-scripts.)
 - [Screenshots](#screenshots)
 - [Features](#features)
 - [Getting Started with LoRAdo](#getting-started-with-lorado)
+- [Using LoRAdo](#using-lorado)
+- [How LoRAdo Works](#how-lorado-works)
 - [Generation examples](#generation-examples)
 
 <!-- tocstop -->
@@ -34,8 +36,8 @@ We wanted to provide an easy way to train LoRAs for different use cases. During 
 to build a few small helper functions to help us gather images and crop them as well as create
 caption files. This UI offers an easy way to create LoRAs without overthinking it.
 
-
 ## Screenshots
+
 <table>
 <tr>
 <td align="center">
@@ -99,19 +101,33 @@ The cropped images
     Your app should now be running on [http://localhost:3000](http://localhost:3000). Navigate to
     this URL in your browser to explore the LoRAdo UI.
 
-4. **Using LoRAdo:**
+## Using LoRAdo
 
-    - **Step 1:** Upload your desired image or images.
-    - **Step 2:** Utilize the in-built face detection for quick crops or adjust as per your
-      requirements.
-    - **Step 3:** With a single click, transform your images into a ready-to-use dataset for
-      [Kohya_ss](https://github.com/bmaltais/kohya_ss/)!
+-   **Step 1:** Upload your desired image or images.
+-   **Step 2:** Utilize the in-built face detection for quick crops or adjust as per your
+    requirements.
+-   **Step 3:** With a single click, transform your images into a ready-to-use dataset for
+    [Kohya_ss](https://github.com/bmaltais/kohya_ss/)!
 
-5. **Feedback and Support:** Encountered an issue or have a suggestion? Join our
-   [Discord community](https://discord.com/invite/m3TBB9XEkb) or open an issue on GitHub. We'd love
-   to hear from you!
+## How LoRAdo Works
 
----
+At the heart of LoRAdo is the intent to simplify the complex.
+
+1. **Image Optimization:** Start with any image. LoRAdo smartly crops it to fit the ideal SDXL
+   resolution. For images with faces, they become the focal point, ensuring the best visual result.
+   Without a face? No worries, we center-crop it perfectly.
+
+2. **Multiple Resolutions:** Beyond the default, you have the option to generate images in all 9
+   SDXL resolutions, as an attempt to increase flexibility without compromising on quality.
+
+3. **Configuration Made Easy:** LoRAdo generates a configuration file tailored for Kohya_ss. Once
+   your project is set, integrating it with Kohya_ss is a breeze. Simply load the config under the
+   LoRA tab, and you're all set to begin training. And if you wish, Kohya_ss offers more granular
+   configuration options.
+
+While our approach is guided by a strong opinion on usability, it still leaves room for
+customization. As we evolve, expect enhanced configurability. But rest assured, simplicity will
+always be our guiding star, ensuring that interacting with LoRAdo remains intuitive.
 
 Example images via [@anamnesis33](https://unsplash.com/@anamnesis33)
 
@@ -128,7 +144,8 @@ configuration is planned for future releases.
 
 ## Generation examples
 
-These examples were generated from a LoRA, trained on a dataset that was prepared with this tool/approach
+These examples were generated from a LoRA, trained on a dataset that was prepared with this
+tool/approach
 
 [<img src="assets/generations/example-1.png" width="150">](assets/generations/example-1.png)
 [<img src="assets/generations/example-2.png" width="150">](assets/generations/example-2.png)
@@ -140,3 +157,7 @@ These examples were generated from a LoRA, trained on a dataset that was prepare
 [<img src="assets/generations/example-9.png" width="150">](assets/generations/example-9.png)
 [<img src="assets/generations/example-10.png" width="150">](assets/generations/example-10.png)
 [<img src="assets/generations/example-11.png" width="150">](assets/generations/example-11.png)
+
+**Feedback and Support:** Encountered an issue or have a suggestion? Join our
+[Discord community](https://discord.com/invite/m3TBB9XEkb) or open an issue on GitHub. We'd love to
+hear from you!
