@@ -6,6 +6,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import { kohyaConfig } from "@/data/kohyaConfig";
 import { ensureDirExists } from "@/services/prepare/utils";
+import { createSamplePrompt } from "@/utils/samples";
 
 export const config = {
 	api: {
@@ -47,9 +48,8 @@ export default async function prepareDataHandler(
 					await ensureDirExists(baseDir);
 
 					const {
-						//
-						// subject,
-						// className,
+						subject,
+						className,
 						epochs,
 						lowVRAM,
 						sample,
@@ -64,7 +64,7 @@ export default async function prepareDataHandler(
 						epoch: epochs,
 						output_name: filename,
 						network_dim: lowVRAM ? 32 : 256,
-						sample_prompts: "",
+						sample_prompts: sample ? createSamplePrompt(subject, className) : "",
 						logging_dir: path.join(baseDir, "log"),
 						reg_data_dir: regularisation ? path.join(baseDir, "reg") : "",
 						output_dir: path.join(baseDir, "model"),
