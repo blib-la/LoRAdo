@@ -60,7 +60,6 @@ The prepared folder
 <br/>
 The cropped images
 </p>
-
 ## Features
 
 -   Dataset creation
