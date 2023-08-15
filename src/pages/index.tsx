@@ -142,6 +142,11 @@ export default function Home() {
         formData,
       );
 
+      const repeats = Math.min(
+        Math.max(Math.ceil(150 / (images.length * (data.crop ? 9 : 1))), 5),
+        50,
+      );
+
       const imagePromises = images.map(async (image, index) => {
         const counter = index + 1;
         const imageData = new FormData();
@@ -172,6 +177,7 @@ export default function Home() {
         imageData.append("className", data.className);
         imageData.append("crop", data.crop.toString());
         imageData.append("counter", counter.toString());
+        imageData.append("repeats", repeats.toString());
 
         // Now sending each image separately to a different endpoint
         const imageResponse = await axios.post("/api/upload-image", imageData);
@@ -402,8 +408,13 @@ export default function Home() {
                   </div>
                 </Alert>
               )}
+              {error && (
+                <Alert variant="soft" color="danger">
+                  {error.message}
+                </Alert>
+              )}
               <Alert
-                variant="soft"
+                variant="outlined"
                 color={
                   images.length >= preferredLength
                     ? "success"
@@ -412,25 +423,6 @@ export default function Home() {
                     : "danger"
                 }
                 size="sm"
-                endDecorator={
-                  <Button
-                    size="sm"
-                    variant="solid"
-                    disabled={images.length === 0}
-                    color={
-                      images.length >= preferredLength
-                        ? "success"
-                        : images.length >= secondaryLength
-                        ? "warning"
-                        : "danger"
-                    }
-                    onClick={() => {
-                      setImages([]);
-                    }}
-                  >
-                    Remove all images
-                  </Button>
-                }
               >
                 Using {images.length} image{images.length === 1 ? "" : "s"}.
                 {images.length < secondaryLength && images.length > 0 && (
@@ -462,6 +454,17 @@ export default function Home() {
           </Grid>
         </Grid>
       </Box>
+      <Box>
+        <Button
+          variant="soft"
+          disabled={images.length === 0}
+          onClick={() => {
+            setImages([]);
+          }}
+        >
+          Remove all images
+        </Button>
+      </Box>
       <Masonry columns={4}>
         {images.map((image, index) => (
           <ImageItem
@@ -482,7 +485,7 @@ export default function Home() {
           />
         ))}
         {images.length === 0 &&
-          exampleImages.map((image, index) => (
+          exampleImages.map((image) => (
             <ImageItem
               key={image.id}
               demo

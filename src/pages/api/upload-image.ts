@@ -33,8 +33,8 @@ export default async function uploadImageHandler(
         const [caption] = fields.caption;
         const crop = fields.crop[0] === "true";
         const counter = Number.parseInt(fields.counter[0], 10);
+        const repeats = Number.parseInt(fields.repeats[0], 10);
         const datasetDir = path.join(baseDir, "dataset");
-        console.log({ crop }, crop === true);
         // Ensure directories exist
         await ensureDirExists(datasetDir);
 
@@ -56,7 +56,7 @@ export default async function uploadImageHandler(
                     sizes,
                     crop,
                     zoomLevels: [0],
-                    repeats: 10,
+                    repeats,
                     className,
                     subject,
                     outDir: baseDir,
