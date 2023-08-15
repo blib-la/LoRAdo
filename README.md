@@ -12,8 +12,15 @@ With LoRAdo, creating datasets for image training is straightforward and efficie
 
 **Screenshots**
 
+<figure align="center">
+<img src="assets/ui.png" width="600" alt="user interface">
+<figcaption>The user interface</figcaption>
+</figure>
+<figure align="center">
+<img src="assets/folder.png" width="300" alt="folders">
+<figcaption>The prpared folder</figcaption>
+</figure>
 
-![img.png](assets/img.png)
  
 ## Getting Started with LoRAdo 🚀
 
