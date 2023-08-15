@@ -1,22 +1,26 @@
 {
   "name": "lorado",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.1",
   "private": true,
-  "license": "AGPL 3.0",
-  "author": "pixelass (https://github.com/pixelass)",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/failfa-st/LoRAdo.git"
-  },
   "homepage": "https://github.com/failfa-st/LoRAdo",
   "bugs": {
     "url": "https://github.com/failfa-st/LoRAdo/issues"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/failfa-st/LoRAdo.git"
+  },
+  "license": "AGPL 3.0",
+  "author": "pixelass (https://github.com/pixelass)",
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
+    "changelog": "npx conventional-changelog-cli -p angular -i CHANGELOG.md -s",
+    "dev": "next dev",
+    "lint": "next lint",
+    "ncu": "npx npm-check-updates -u",
+    "spj": "npx sort-package-json",
     "start": "next start",
-    "lint": "next lint"
+    "toc": "npx markdown-toc README.md -i"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
