@@ -78,11 +78,18 @@ export default async function uploadImageHandler(
 						}
 					}
 
-					await Promise.all(filePromises);
+					const urls = await Promise.all(filePromises);
 
-					console.log("Done:", datasetDir);
-
-					response.status(201).json({ message: "Success" });
+					response.status(201).json({
+						message: "Success",
+						caption,
+						croppedFiles: urls.flat(),
+						datasetFile: `/api/uploads/${
+							datasetDir.split("training")[1]
+						}/${filename}.jpg`
+							.replaceAll("\\", "/")
+							.replace(/\/+/g, "/"),
+					});
 				});
 			} catch (error) {
 				console.log(error);

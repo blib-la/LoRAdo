@@ -44,7 +44,7 @@ export default async function prepareDataHandler(
 						}
 					}
 
-					const baseDir = path.join(process.cwd(), "training", Date.now().toString());
+					const baseDir = path.join(process.cwd(), "training", parsedFields.projectName);
 					await ensureDirExists(baseDir);
 
 					const {

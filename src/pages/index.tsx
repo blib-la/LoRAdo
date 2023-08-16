@@ -1,3 +1,5 @@
+import path from "node:path";
+
 import {
 	Alert,
 	Box,
@@ -14,6 +16,8 @@ import {
 } from "@mui/joy";
 import axios, { AxiosError } from "axios";
 import { nanoid } from "nanoid";
+import { GetServerSidePropsContext } from "next";
+import { useRouter } from "next/router";
 import { DragEvent, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
@@ -24,18 +28,21 @@ import Masonry from "@/components/Masonry";
 import SlideshowModal from "@/components/SlideshowModal";
 import SyncedSliderInput from "@/components/SynchedSliderInput";
 import { exampleImages } from "@/data/exampleImages";
-import { FormDataModel, ImageData } from "@/types";
+import { getDirectories } from "@/pages/api/projects";
+import { FormDataModel, ImageData, ImageUpload } from "@/types";
 import { traverseFileTree } from "@/utils/traverseFileTree";
 
-export default function Home() {
+export default function Home({ directories }: { directories: { fullPath: string; id: string }[] }) {
 	const {
 		formState: { errors },
 		register,
 		handleSubmit,
 		control,
 		setValue,
-	} = useForm({
+	} = useForm<FormDataModel>({
 		defaultValues: {
+			projectName: "",
+			sdxl: true,
 			filename: "",
 			checkpoint: "",
 			subject: "",
@@ -48,8 +55,8 @@ export default function Home() {
 			files: [],
 		},
 	});
+	const { push } = useRouter();
 	const [loading, setLoading] = useState(false);
-	const [directory, setDirectory] = useState("");
 	const [error, setError] = useState<Error | null>(null);
 	const [images, setImages] = useState<Array<ImageData>>([]);
 	const [isModalOpen, setModalOpen] = useState(false);
@@ -129,6 +136,8 @@ export default function Home() {
 		setLoading(true);
 		setError(null);
 		const formData = new FormData();
+		formData.append("projectName", data.projectName);
+		formData.append("sdxl", data.sdxl.toString());
 		formData.append("checkpoint", data.checkpoint);
 		formData.append("subject", data.subject);
 		formData.append("className", data.className);
@@ -166,12 +175,14 @@ export default function Home() {
 				}
 
 				const blob = new Blob(byteArrays, { type: "image/jpeg" });
-				imageData.append(`file`, blob, image.name);
+				imageData.append("projectName", data.projectName);
+				imageData.append("sdxl", data.sdxl.toString());
+				imageData.append("file", blob, image.name);
+				imageData.append("caption", image.caption ?? `${data.subject} ${data.className}`);
 				imageData.append(
-					`caption`,
-					image.caption ?? `photo of ${data.subject} ${data.className}`
+					"filename",
+					`${data.subject}--${counter.toString().padStart(4, "0")}`
 				);
-				imageData.append(`filename`, `${data.subject} (${counter})`);
 				imageData.append("baseDir", response.data.baseDir);
 				imageData.append("subject", data.subject);
 				imageData.append("className", data.className);
@@ -180,7 +191,10 @@ export default function Home() {
 				imageData.append("repeats", repeats.toString());
 
 				// Now sending each image separately to a different endpoint
-				const imageResponse = await axios.post("/api/upload-image", imageData);
+				const imageResponse = await axios.post<{ croppedFiles: ImageUpload[] }>(
+					"/api/image/upload",
+					imageData
+				);
 				setImages(prevState =>
 					prevState.map(prevImage =>
 						prevImage.id === image.id ? { ...prevImage, uploaded: true } : prevImage
@@ -190,9 +204,13 @@ export default function Home() {
 			});
 
 			// Waiting for all image uploads to finish
-			const imageResponses = await Promise.all(imagePromises);
-			console.log(imageResponses.map(resp => resp.data));
-			setDirectory(response.data.baseDir);
+			try {
+				await Promise.all(imagePromises);
+
+				push(`/projects/${data.projectName}`);
+			} catch (error) {
+				console.error(error);
+			}
 		} catch (error) {
 			console.error("Error sending data: ", error);
 			setError(error as Error | AxiosError);
@@ -203,8 +221,9 @@ export default function Home() {
 
 	const preferredLength = 8;
 	const secondaryLength = 5;
+
 	return (
-		<Layout>
+		<Layout directories={directories}>
 			<SlideshowModal
 				images={images}
 				currentIndex={currentImageIndex === null ? 0 : currentImageIndex}
@@ -219,10 +238,10 @@ export default function Home() {
 				<Grid container spacing={2} columns={{ xs: 1, md: 2 }}>
 					<Grid xs={1}>
 						<Stack gap={2}>
-							<Grid container spacing={2} columns={2}>
-								<Grid xs={1}>
+							<Grid container>
+								<Grid xs>
 									<FormControl color={errors.checkpoint ? "danger" : "neutral"}>
-										<FormLabel>SDXL Checkpoint</FormLabel>
+										<FormLabel>Checkpoint (SDXL)</FormLabel>
 										<Input
 											error={Boolean(errors.checkpoint)}
 											placeholder="C:\path\to\your\sd_xl_base_1.0.safetensors"
@@ -233,13 +252,84 @@ export default function Home() {
 										</FormHelperText>
 									</FormControl>
 								</Grid>
+								<Grid sx={{ display: "flex", alignItems: "center" }}>
+									<Typography
+										component="label"
+										startDecorator={
+											<Controller
+												name="sdxl"
+												control={control}
+												render={({ field }) => (
+													<Switch
+														disabled
+														sx={{ ml: 1 }}
+														{...field}
+														checked={field.value}
+													/>
+												)}
+											/>
+										}
+									>
+										SDXL
+									</Typography>
+								</Grid>
+							</Grid>
+							<Grid container spacing={2} columns={2}>
+								<Grid xs={1}>
+									<FormControl color={errors.projectName ? "danger" : "neutral"}>
+										<FormLabel>Project Name</FormLabel>
+										<Controller
+											control={control}
+											name="projectName"
+											rules={{ required: true }}
+											render={({ field }) => (
+												<Input
+													error={Boolean(errors.projectName)}
+													placeholder="my_lora"
+													{...field}
+													onChange={event =>
+														field.onChange({
+															target: {
+																value: event.target.value
+																	.toLowerCase()
+																	.replace(/\s+/g, "_")
+																	.replace(/_+/g, "_"),
+															},
+														})
+													}
+												/>
+											)}
+										/>
+
+										<FormHelperText>
+											Please enter the name of the project.
+										</FormHelperText>
+									</FormControl>
+								</Grid>
 								<Grid xs={1}>
 									<FormControl color={errors.filename ? "danger" : "neutral"}>
 										<FormLabel>LoRA Name</FormLabel>
-										<Input
-											error={Boolean(errors.filename)}
-											placeholder="ohwxwoman"
-											{...register("filename", { required: true })}
+										<Controller
+											control={control}
+											name="filename"
+											rules={{ required: true }}
+											render={({ field }) => (
+												<Input
+													error={Boolean(errors.projectName)}
+													placeholder="ohwxwoman_v1"
+													{...field}
+													onChange={event =>
+														field.onChange({
+															target: {
+																value: event.target.value
+																	.toLowerCase()
+																	.replace(/\s+/g, "_")
+																	.replace(/_+/g, "_"),
+															},
+														})
+													}
+												/>
+											)}
 										/>
 										<FormHelperText>
 											Please enter the filename of the LoRA.
@@ -302,7 +392,11 @@ export default function Home() {
 												name="crop"
 												control={control}
 												render={({ field }) => (
-													<Switch sx={{ ml: 1 }} {...field} />
+													<Switch
+														sx={{ ml: 1 }}
+														{...field}
+														checked={field.value}
+													/>
 												)}
 											/>
 										}
@@ -322,7 +416,11 @@ export default function Home() {
 												name="sample"
 												control={control}
 												render={({ field }) => (
-													<Switch sx={{ ml: 1 }} {...field} />
+													<Switch
+														sx={{ ml: 1 }}
+														{...field}
+														checked={field.value}
+													/>
 												)}
 											/>
 										}
@@ -344,7 +442,11 @@ export default function Home() {
 												name="lowVRAM"
 												control={control}
 												render={({ field }) => (
-													<Switch sx={{ ml: 1 }} {...field} />
+													<Switch
+														sx={{ ml: 1 }}
+														{...field}
+														checked={field.value}
+													/>
 												)}
 											/>
 										}
@@ -363,7 +465,12 @@ export default function Home() {
 												name="regularisation"
 												control={control}
 												render={({ field }) => (
-													<Switch disabled sx={{ ml: 1 }} {...field} />
+													<Switch
+														disabled
+														sx={{ ml: 1 }}
+														{...field}
+														checked={field.value}
+													/>
 												)}
 											/>
 										}
@@ -396,16 +503,7 @@ export default function Home() {
 									Prepare
 								</Button>
 							</Box>
-							{directory && (
-								<Alert variant="soft" color="success">
-									<div>
-										<Typography level="body-sm">
-											The training data has been created at:
-										</Typography>
-										<Typography level="body-md">{directory}</Typography>
-									</div>
-								</Alert>
-							)}
+
 							{error && (
 								<Alert variant="soft" color="danger">
 									{error.message}
@@ -443,6 +541,9 @@ export default function Home() {
 					</Grid>
 					<Grid xs={1} sx={{ display: "flex" }}>
 						<FileUpload
+							min={1}
+							ok={secondaryLength}
+							recommended={preferredLength}
 							onDrop={handleDrop}
 							onLoad={imageData => {
 								setImages(prev => [
@@ -465,7 +566,7 @@ export default function Home() {
 					Remove all images
 				</Button>
 			</Box>
-			<Masonry columns={4}>
+			<Masonry>
 				{images.map((image, index) => (
 					<ImageItem
 						key={image.id}
@@ -484,6 +585,7 @@ export default function Home() {
 						}}
 					/>
 				))}
+
 				{images.length === 0 &&
 					exampleImages.map(image => (
 						<ImageItem
@@ -504,4 +606,13 @@ export default function Home() {
 			</Masonry>
 		</Layout>
 	);
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+	const directories = await getDirectories(path.join(process.cwd(), "training"));
+	return {
+		props: {
+			directories,
+		},
+	};
 }

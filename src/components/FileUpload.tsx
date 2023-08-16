@@ -2,6 +2,9 @@ import { Typography, Sheet, Box } from "@mui/joy";
 import { DragEvent } from "react";
 
 interface FileUploadProps {
+	min: number;
+	ok: number;
+	recommended: number;
 	onDrop(event: DragEvent<HTMLLabelElement>): void;
 	onLoad(imageData: ImageData): void;
 }
@@ -12,7 +15,7 @@ interface ImageData {
 	width: number;
 	height: number;
 }
-export default function FileUpload({ onDrop, onLoad }: FileUploadProps) {
+export default function FileUpload({ onDrop, onLoad, min, ok, recommended }: FileUploadProps) {
 	return (
 		<Sheet
 			component="label"
@@ -32,9 +35,20 @@ export default function FileUpload({ onDrop, onLoad }: FileUploadProps) {
 			onDrop={onDrop}
 			onDragOver={e => e.preventDefault()}
 		>
-			<Typography sx={{ textAlign: "center" }}>
-				Drop files or folders here or click to select files from disk.
-			</Typography>
+			<Box sx={{ textAlign: "center" }}>
+				<Typography level="body-md" display="block">
+					Drop files or folders here or click to select files from disk.
+				</Typography>
+				<Typography color="danger" level="body-sm" display="block" mt={1}>
+					Minimum: {min} image{min === 1 ? "" : "s"}
+				</Typography>
+				<Typography color="warning" level="body-sm" display="block" mt={1}>
+					Better: {ok} images or more
+				</Typography>
+				<Typography color="success" level="body-sm" display="block" mt={1}>
+					Recommended: {recommended} images or more
+				</Typography>
+			</Box>
 
 			<Box
 				type="file"

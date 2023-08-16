@@ -1,6 +1,7 @@
-import Checkicon from "@mui/icons-material/Check";
+import CheckIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
+import SaveIcon from "@mui/icons-material/Save";
 import {
 	IconButton,
 	Typography,
@@ -12,6 +13,7 @@ import {
 	FormLabel,
 	FormHelperText,
 	CircularProgress,
+	useTheme,
 } from "@mui/joy";
 import dynamic from "next/dynamic";
 import { ChangeEventHandler, useState } from "react";
@@ -21,39 +23,50 @@ import { ImageData } from "@/types";
 const FaceDetectionImage = dynamic(() => import("@/components/FaceDetectionImage"), {
 	ssr: false,
 });
-interface ImageItemProps {
+export interface ImageItemProps {
+	upload?: boolean;
+	modified?: boolean;
 	demo?: boolean;
 	image: ImageData;
 	onRemove?: () => void;
+	onSave?: () => void;
 	onOpen?: () => void;
 	onFace?: (hasFace: boolean) => void;
 	onCaptionChange?: ChangeEventHandler<HTMLTextAreaElement>;
 }
 
-function StateIcon({ loading, done }: { loading?: boolean; done?: boolean }) {
+export function StateIcon({ loading, done }: { loading?: boolean; done?: boolean }) {
+	const theme = useTheme();
 	if (loading) {
 		return <CircularProgress size="sm" />;
 	}
 
-	return done ? <Checkicon /> : <FileUploadIcon />;
+	return done ? (
+		<CheckIcon sx={{ color: theme.palette.success[500] }} />
+	) : (
+		<FileUploadIcon sx={{ color: theme.palette.warning[500] }} />
+	);
 }
 
 export default function ImageItem({
 	image,
 	demo,
+	upload,
+	modified,
 	onRemove,
+	onSave,
 	onOpen,
 	onFace,
 	onCaptionChange,
 }: ImageItemProps) {
-	const [faceDetection, setFaceDetection] = useState(false);
+	const [faceDetection, setFaceDetection] = useState(upload);
 
 	const hasGoodSize = Math.min(image.width, image.height) >= 1536;
 
 	return (
 		<Card
 			variant="soft"
-			color={hasGoodSize && image.hasFace ? "neutral" : "danger"}
+			color={(hasGoodSize && image.hasFace) || upload ? "neutral" : "danger"}
 			sx={{
 				breakInside: "avoid",
 				opacity: demo ? 0.25 : undefined,
@@ -62,29 +75,49 @@ export default function ImageItem({
 			}}
 		>
 			<div>
-				<Typography
-					level="title-md"
-					startDecorator={
-						<StateIcon loading={!faceDetection} done={image.uploaded || demo} />
-					}
-				>
-					{image.name}
-				</Typography>
+				{
+					<Typography
+						level="title-md"
+						startDecorator={
+							<StateIcon
+								loading={!faceDetection}
+								done={image.uploaded || demo || (upload && !modified)}
+							/>
+						}
+						sx={{ mr: 6 }}
+					>
+						{image.name}
+					</Typography>
+				}
 
-				{!demo && !image.uploaded && (
+				{onRemove && !modified && (
 					<IconButton
 						aria-label="Remove"
 						size="sm"
+						variant="solid"
+						color="danger"
 						sx={{ position: "absolute", top: "0.875rem", right: "0.5rem" }}
 						onClick={onRemove}
 					>
 						<DeleteIcon />
 					</IconButton>
 				)}
+				{onSave && modified && (
+					<IconButton
+						aria-label="Save"
+						size="sm"
+						variant="solid"
+						color="warning"
+						sx={{ position: "absolute", top: "0.875rem", right: "0.5rem" }}
+						onClick={onSave}
+					>
+						<SaveIcon />
+					</IconButton>
+				)}
 			</div>
 			<CardContent>
 				<div>
-					<Typography level="body-xs">Size: {image.size} bytes </Typography>
+					{!upload && <Typography level="body-xs">Size: {image.size} bytes </Typography>}
 					<Typography level="body-xs">
 						Dimensions: {image.width}x{image.height}
 					</Typography>
@@ -104,6 +137,7 @@ export default function ImageItem({
 				onClick={onOpen}
 			>
 				<FaceDetectionImage
+					noDetection={upload}
 					src={image.data}
 					alt={image.name}
 					width={image.width}

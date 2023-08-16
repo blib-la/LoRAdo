@@ -11,6 +11,8 @@ export interface ImageData {
 }
 
 export interface FormDataModel {
+	projectName: string;
+	sdxl: boolean;
 	checkpoint: string;
 	subject: string;
 	className: string;
@@ -21,4 +23,14 @@ export interface FormDataModel {
 	regularisation: boolean;
 	files: File[];
 	filename: string;
+}
+
+export interface ImageUpload {
+	modified?: boolean;
+	height: number;
+	width: number;
+	alt: string;
+	src: string;
+	captionPath: string;
+	outputPath: string;
 }

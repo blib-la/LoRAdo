@@ -4,6 +4,8 @@ import path from "node:path";
 import { cropImageToFace, loadModels } from "./crop";
 import { ensureDirExists, getClosestSize, getImageDimensions } from "./utils";
 
+import { ImageUpload } from "@/types";
+
 export async function prepareImage({
 	crop = false,
 	image,
@@ -26,6 +28,7 @@ export async function prepareImage({
 	sizes: [number, number][];
 }) {
 	await loadModels();
+	const urls: ImageUpload[] = [];
 
 	const outFolderName = path.join(outDir, "img", `${repeats}_${subject} ${className}`);
 
@@ -36,7 +39,7 @@ export async function prepareImage({
 	try {
 		caption = await fs.readFile(image.replace(/\.jpe?g$/, ".txt"), "utf-8");
 	} catch {
-		caption = `portrait photo of ${subject} ${className}, best quality`;
+		caption = `${subject} ${className}`;
 	}
 
 	const requestedSizes = crop
@@ -57,9 +60,20 @@ export async function prepareImage({
 					++localCounter;
 					const imageId = `${counter.toString().padStart(4, "0")}.${localCounter
 						.toString()
-						.padStart(4, "0")}`;
-					const outputPath = path.join(outFolderName, `${subject} (${imageId}).png`);
-					const captionPath = path.join(outFolderName, `${subject} (${imageId}).txt`);
+						.padStart(2, "0")}`;
+					const filename = `${subject}--${imageId}`;
+					const outputPath = path.join(outFolderName, `${filename}.png`);
+					const captionPath = path.join(outFolderName, `${filename}.txt`);
+					urls.push({
+						height,
+						width,
+						alt: caption,
+						captionPath,
+						outputPath,
+						src: `/api/uploads/${outFolderName.split("training")[1]}/${filename}.png`
+							.replaceAll("\\", "/")
+							.replace(/\/+/g, "/"),
+					});
 
 					// eslint-disable-next-line no-await-in-loop
 					await fs.writeFile(outputPath, result);
@@ -72,6 +86,8 @@ export async function prepareImage({
 			}
 		}
 	}
+
+	return urls;
 }
 /*
 Let counter = 0;

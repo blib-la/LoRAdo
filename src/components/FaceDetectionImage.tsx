@@ -6,8 +6,9 @@ import { useEffect, useRef, useState } from "react";
 export default function FaceDetectionImage({
 	alt,
 	onFace,
+	noDetection,
 	...props
-}: ImageProps & { onFace?(hasFace: boolean): void }) {
+}: ImageProps & { onFace?(hasFace: boolean): void; noDetection?: boolean }) {
 	const [box, setBox] = useState<{
 		xPercentage: number;
 		yPercentage: number;
@@ -19,16 +20,18 @@ export default function FaceDetectionImage({
 	const imgRef = useRef<HTMLImageElement>(null);
 
 	useEffect(() => {
-		const loadModels = async () => {
-			const MODEL_URL = "/face-api/models";
-			await faceapi.nets.tinyFaceDetector.load(MODEL_URL);
-			await faceapi.nets.faceLandmark68Net.load(MODEL_URL);
-			await faceapi.nets.faceRecognitionNet.load(MODEL_URL);
-			setModelsLoaded(true);
-		};
+		if (!noDetection) {
+			const loadModels = async () => {
+				const MODEL_URL = "/face-api/models";
+				await faceapi.nets.tinyFaceDetector.load(MODEL_URL);
+				await faceapi.nets.faceLandmark68Net.load(MODEL_URL);
+				await faceapi.nets.faceRecognitionNet.load(MODEL_URL);
+				setModelsLoaded(true);
+			};
 
-		loadModels();
-	}, []);
+			loadModels();
+		}
+	}, [noDetection]);
 
 	useEffect(() => {
 		const detectFace = async () => {
@@ -63,8 +66,10 @@ export default function FaceDetectionImage({
 			}
 		};
 
-		detectFace();
-	}, [modelsLoaded, imageLoaded]);
+		if (!noDetection) {
+			detectFace();
+		}
+	}, [modelsLoaded, imageLoaded, noDetection]);
 
 	return (
 		<Box

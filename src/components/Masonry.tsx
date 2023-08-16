@@ -3,8 +3,7 @@ import { Children, ReactNode } from "react";
 
 interface MasonryProps {
 	children: ReactNode;
-	columns?: number; // Number of columns for the masonry layout
-	gap?: number; // Gap between masonry items
+	gap?: number;
 }
 
 export default function Masonry({ children, gap = 2 }: MasonryProps) {
@@ -16,9 +15,15 @@ export default function Masonry({ children, gap = 2 }: MasonryProps) {
 				columnGap: gap,
 			}}
 		>
-			{Children.map(children, child => (
-				<Box sx={{ mb: gap }}>{child}</Box>
-			))}
+			{Children.map(
+				children,
+				(child, index) =>
+					child && (
+						<Box key={index} sx={{ mb: gap }}>
+							{child}
+						</Box>
+					)
+			)}
 		</Box>
 	);
 }
