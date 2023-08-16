@@ -59,7 +59,7 @@ export function BasicTable({
 									/>
 								</Box>
 							</Box>
-							<Box component="td" sx={{ maxWidth: 200 }}>
+							<Box component="td" sx={{ width: 200 }}>
 								{name}
 							</Box>
 							<td>
@@ -265,7 +265,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 				src,
 				alt,
 				outputPath,
-				captionPath: hasCaption ? captionPath : null,
+				captionPath: hasCaption ? captionPath : outputPath.replace(/\.png$/, ".txt"),
 			};
 		})
 	);
