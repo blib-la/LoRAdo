@@ -21,6 +21,8 @@ import { useRouter } from "next/router";
 import { DragEvent, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
+import { getDirectories } from "./api/projects";
+
 import FileUpload from "@/components/FileUpload";
 import ImageItem from "@/components/ImageItem";
 import Layout from "@/components/Layout";
@@ -28,7 +30,6 @@ import Masonry from "@/components/Masonry";
 import SlideshowModal from "@/components/SlideshowModal";
 import SyncedSliderInput from "@/components/SynchedSliderInput";
 import { exampleImages } from "@/data/exampleImages";
-import { getDirectories } from "@/pages/api/projects";
 import { FormDataModel, ImageData, ImageUpload } from "@/types";
 import { traverseFileTree } from "@/utils/traverseFileTree";
 

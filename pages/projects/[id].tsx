@@ -10,9 +10,10 @@ import { GetServerSidePropsContext } from "next";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+import { getDirectories } from "../api/projects";
+
 import Layout from "@/components/Layout";
 import SlideshowModal from "@/components/SlideshowModal";
-import { getDirectories } from "@/pages/api/projects";
 import { getImageDimensions } from "@/services/prepare/utils";
 import { ImageUpload } from "@/types";
 
