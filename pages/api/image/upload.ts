@@ -35,6 +35,7 @@ export default async function uploadImageHandler(
 					const [subject] = fields.subject;
 					const [caption] = fields.caption;
 					const crop = fields.crop[0] === "true";
+					const sdxl = fields.sdxl[0] === "true";
 					const counter = Number.parseInt(fields.counter[0], 10);
 					const repeats = Number.parseInt(fields.repeats[0], 10);
 					const datasetDir = path.join(baseDir, "dataset");
@@ -62,6 +63,7 @@ export default async function uploadImageHandler(
 											repeats,
 											className,
 											subject,
+											sdxl,
 											outDir: baseDir,
 										});
 									};

@@ -40,6 +40,7 @@ export default function Home({ directories }: { directories: { fullPath: string;
 		handleSubmit,
 		control,
 		setValue,
+		watch,
 	} = useForm<FormDataModel>({
 		defaultValues: {
 			projectName: "",
@@ -210,6 +211,7 @@ export default function Home({ directories }: { directories: { fullPath: string;
 
 	const preferredLength = 8;
 	const secondaryLength = 5;
+	const isSDXL = watch("sdxl");
 
 	return (
 		<Layout directories={directories}>
@@ -230,10 +232,14 @@ export default function Home({ directories }: { directories: { fullPath: string;
 							<Grid container>
 								<Grid xs>
 									<FormControl color={errors.checkpoint ? "danger" : "neutral"}>
-										<FormLabel>Checkpoint (SDXL)</FormLabel>
+										<FormLabel>
+											{isSDXL ? "SDXL" : "SD 1.5"} Checkpoint
+										</FormLabel>
 										<Input
 											error={Boolean(errors.checkpoint)}
-											placeholder="C:\path\to\your\sd_xl_base_1.0.safetensors"
+											placeholder={`C:\\path\\to\\your\\${
+												isSDXL ? "sd_xl_base_1.0" : "v1-5-pruned"
+											}.safetensors`}
 											{...register("checkpoint", { required: true })}
 										/>
 										<FormHelperText>
@@ -250,7 +256,6 @@ export default function Home({ directories }: { directories: { fullPath: string;
 												control={control}
 												render={({ field }) => (
 													<Switch
-														disabled
 														sx={{ ml: 1 }}
 														{...field}
 														checked={field.value}

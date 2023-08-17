@@ -14,7 +14,12 @@ ${content.join(" ")} ${flags} --n ${exclude.join(", ")}
 export function createSamplePrompt(
 	subject: string,
 	className: string,
-	{ real, pixar, watercolor }: { real?: boolean; pixar?: boolean; watercolor?: boolean } = {
+	{
+		real,
+		pixar,
+		watercolor,
+		sdxl,
+	}: { real?: boolean; pixar?: boolean; watercolor?: boolean; sdxl?: boolean } = {
 		real: true,
 	}
 ): string {
@@ -24,7 +29,7 @@ export function createSamplePrompt(
 		real: {
 			header: "Photorealistic",
 			content: ["portrait photo of", ...commonContent, "hasselblad, fujifilm"],
-			flags: "--h 1216 --w 832 --l 8 --s 35",
+			flags: `--h ${sdxl ? 1216 : 768} --w ${sdxl ? 832 : 512} --l 8 --s 35`,
 			exclude: ["worst quality", "3d", "blurry"],
 		},
 		pixar: {
@@ -34,7 +39,7 @@ export function createSamplePrompt(
 				...commonContent,
 				"cg, octane render, unreal engine",
 			],
-			flags: "--h 1024 --w 1024 --l 8 --s 35",
+			flags: `--h ${sdxl ? 1024 : 512} --w ${sdxl ? 1024 : 512} --l 8 --s 35`,
 			exclude: ["worst quality", "photo", "photorealistic"],
 		},
 		watercolor: {
@@ -44,7 +49,7 @@ export function createSamplePrompt(
 				...commonContent,
 				"sketch, illustration, ink outlines, unfinished background",
 			],
-			flags: "--h 1024 --w 1024 --l 8 --s 35",
+			flags: `--h ${sdxl ? 1024 : 512} --w ${sdxl ? 1024 : 512} --l 8 --s 35`,
 			exclude: ["worst quality", "photo", "photorealistic"],
 		},
 	};

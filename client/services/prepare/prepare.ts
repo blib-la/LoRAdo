@@ -4,6 +4,7 @@ import path from "node:path";
 import { cropImageToFace, loadModels } from "./crop";
 import { ensureDirExists, getClosestSize, getImageDimensions } from "./utils";
 
+import { sizes15 } from "@/services/prepare/sizes";
 import type { ImageUpload } from "@/types";
 
 export async function prepareImage({
@@ -13,6 +14,7 @@ export async function prepareImage({
 	zoomLevels = [0],
 	className,
 	subject,
+	sdxl,
 	outDir,
 	counter,
 	sizes,
@@ -24,6 +26,7 @@ export async function prepareImage({
 	zoomLevels?: number[];
 	className: string;
 	subject: string;
+	sdxl: boolean;
 	outDir: string;
 	sizes: [number, number][];
 }) {
@@ -42,12 +45,13 @@ export async function prepareImage({
 		caption = `${subject} ${className}`;
 	}
 
+	const baseSizes = sdxl ? sizes : sizes15;
+	const baseSize = sdxl ? [1024, 1024] : [512, 512];
 	const requestedSizes = crop
-		? sizes
+		? baseSizes
 		: [
-				getClosestSize({ height: imageInfo.height!, width: imageInfo.width! }, sizes) ?? [
-					1024, 1024,
-				],
+				getClosestSize({ height: imageInfo.height!, width: imageInfo.width! }, baseSizes) ??
+					baseSize,
 		  ];
 	const failed: string[] = [];
 	let localCounter = 0;
