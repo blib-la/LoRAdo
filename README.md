@@ -82,10 +82,11 @@ The prepared folder
 
 1. **Prerequisites:**
 
-    - Ensure you have `node.js (v18.x.x)` installed. If not, you can download it from
+    - Ensure you have `node.js (v18.17.1)` installed. If not, you can download it from
       [Node.js official site](https://nodejs.org/).
-    - There is an open issue with tensorflow. Please make sure to install v18 (not above). THe
+    - There is an open issue with tensorflow. Please make sure to install v18 (not above). The
       recommended version can be found in [.nvmrc](.nvmrc)
+    - If there is a problem with tensorflow, please check [this issue](https://github.com/failfa-st/LoRAdo/issues/1)
 
 2. **Clone and Install Dependencies:**
 
