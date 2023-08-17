@@ -1,3 +1,11 @@
+# 0.1.0-alpha.7 (2023-08-17)
+
+
+### Bug Fixes
+
+* EXDEV ([708ab9d](https://github.com/failfa-st/LoRAdo/commit/708ab9dfb7627b4118fb0ee646b9581222ae1214))
+
+
 #  (2023-08-17)
 
 
