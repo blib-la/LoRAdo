@@ -73,7 +73,8 @@ The prepared folder
 -   Dataset creation
 -   Captioning tools
 -   Create and edit projects
--   SDXL resolution adjustment
+-   support for SDXL and SD-1.5
+-   SDXL or SD-1.5 resolution adjustment
 -   Multiple image resolutions
 -   [Kohya_ss (UI)](https://github.com/bmaltais/kohya_ss/) config creator
 -   Regularisation image tools (WIP)
@@ -86,7 +87,8 @@ The prepared folder
       [Node.js official site](https://nodejs.org/).
     - There is an open issue with tensorflow. Please make sure to install v18 (not above). The
       recommended version can be found in [.nvmrc](.nvmrc)
-    - If there is a problem with tensorflow, please check [this issue](https://github.com/failfa-st/LoRAdo/issues/1)
+    - If there is a problem with tensorflow, please check
+      [this issue](https://github.com/failfa-st/LoRAdo/issues/1)
 
 2. **Clone and Install Dependencies:**
 
@@ -115,11 +117,11 @@ The prepared folder
 3. **Step 3:** Add captions to your images directly within the app, enhancing the context and
    meaning of each.
 4. **Step 4:** Choose your cropping method:
-    - Opt for minimal cropping by finding the best-fitting SDXL resolution based on the original
-      aspect ratio, while still considering the detected focal point.
-    - Or, generate 9 SDXL compatible crops for each image.
-5. **Step 5:** With a single click, transform your curated images into a dataset tailor-made for
-   [Kohya_ss](https://github.com/bmaltais/kohya_ss/).
+    - Opt for minimal cropping by finding the best-fitting resolution based on the original aspect
+      ratio, while still considering the detected focal point.
+    - Or, generate 9 SDXL (3 SD-1.5 respectively) compatible crops for each image.
+5. **Step 5:** With a single click on "prepare", transform your curated images into a dataset ,
+   compatible to [Kohya_ss](https://github.com/bmaltais/kohya_ss/).
 6. **Step 6:** Navigate to the [training folder](training):
     - Every dataset here comes with its own `config.json` file.
     - These configurations are primed for integration into Kohya_ss.
