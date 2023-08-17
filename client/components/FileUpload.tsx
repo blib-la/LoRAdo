@@ -1,6 +1,6 @@
+import PermMediaIcon from "@mui/icons-material/PermMedia";
 import { Typography, Sheet, Box } from "@mui/joy";
 import { DragEvent } from "react";
-
 interface FileUploadProps {
 	min: number;
 	ok: number;
@@ -35,7 +35,20 @@ export default function FileUpload({ onDrop, onLoad, min, ok, recommended }: Fil
 			onDrop={onDrop}
 			onDragOver={e => e.preventDefault()}
 		>
-			<Box sx={{ textAlign: "center" }}>
+			<Box
+				sx={{
+					pointerEvents: "none",
+					position: "absolute",
+					inset: 0,
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+					opacity: 0.1,
+				}}
+			>
+				<PermMediaIcon sx={{ height: "50%", width: "50%" }} />
+			</Box>
+			<Box sx={{ textAlign: "center", position: "relative" }}>
 				<Typography level="body-md" display="block">
 					Drop files or folders here or click to select files from disk.
 				</Typography>
