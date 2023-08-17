@@ -53,17 +53,18 @@ View and  configure images
 </td>
 </tr>
 <tr>
+
+<td align="center">
+<img src="assets/projects.png" width="400" alt="cropped images">
+<br/>
+Project view
+</td>
 <td align="center">
 <img src="assets/folder.png" width="400" alt="folders">
 <br/>
 The prepared folder
 </td>
 
-<td align="center">
-<img src="assets/crop.png" width="400" alt="cropped images">
-<br/>
-The cropped images
-</td>
 </tr>
 </table>
 
@@ -71,6 +72,7 @@ The cropped images
 
 -   Dataset creation
 -   Captioning tools
+-   Create and edit projects
 -   SDXL resolution adjustment
 -   Multiple image resolutions
 -   [Kohya_ss (UI)](https://github.com/bmaltais/kohya_ss/) config creator
@@ -82,7 +84,8 @@ The cropped images
 
     - Ensure you have `node.js (v18.x.x)` installed. If not, you can download it from
       [Node.js official site](https://nodejs.org/).
-    - There is an open issue with tensorflow. Please make sure to install v18 (not above). THe recommended version can be found in [.nvmrc](.nvmrc)
+    - There is an open issue with tensorflow. Please make sure to install v18 (not above). THe
+      recommended version can be found in [.nvmrc](.nvmrc)
 
 2. **Clone and Install Dependencies:**
 
@@ -102,18 +105,20 @@ The cropped images
     Your app should now be running on [http://localhost:3000](http://localhost:3000). Navigate to
     this URL in your browser to explore the LoRAdo UI.
 
-
 ## Using LoRAdo
 
 1. **Step 1:** Begin by uploading your chosen image(s).
 2. **Step 2:** Let LoRAdo's face detection feature scan the image.
     - If a face is detected, the system identifies it as a potential focal point for cropping.
     - If no face is detected, evaluate if the image is suitable for your needs.
-3. **Step 3:** Add captions to your images directly within the app, enhancing the context and meaning of each.
+3. **Step 3:** Add captions to your images directly within the app, enhancing the context and
+   meaning of each.
 4. **Step 4:** Choose your cropping method:
-    - Opt for minimal cropping by finding the best-fitting SDXL resolution based on the original aspect ratio, while still considering the detected focal point.
+    - Opt for minimal cropping by finding the best-fitting SDXL resolution based on the original
+      aspect ratio, while still considering the detected focal point.
     - Or, generate 9 SDXL compatible crops for each image.
-5. **Step 5:** With a single click, transform your curated images into a dataset tailor-made for [Kohya_ss](https://github.com/bmaltais/kohya_ss/).
+5. **Step 5:** With a single click, transform your curated images into a dataset tailor-made for
+   [Kohya_ss](https://github.com/bmaltais/kohya_ss/).
 6. **Step 6:** Navigate to the [training folder](training):
     - Every dataset here comes with its own `config.json` file.
     - These configurations are primed for integration into Kohya_ss.
