@@ -53,7 +53,8 @@ export default async function uploadImageHandler(
 									const captionPath = path.join(datasetDir, `${filename}.txt`);
 									const prepare = async () => {
 										await fs.writeFile(captionPath, caption);
-										await fs.rename(oldPath, newPath);
+										await fs.copyFile(oldPath, newPath);
+										await fs.unlink(oldPath);
 										return prepareImage({
 											image: newPath,
 											counter,
