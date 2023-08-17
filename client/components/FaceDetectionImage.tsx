@@ -1,20 +1,19 @@
 import { Box } from "@mui/joy";
 import * as faceapi from "@vladmandic/face-api/dist/face-api.esm-nobundle.js";
-import Image, { ImageProps } from "next/image";
+import type { ImageProps } from "next/image";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+
+import type { FaceBox } from "@/types";
 
 export default function FaceDetectionImage({
 	alt,
 	onFace,
 	noDetection,
+	faceBox,
 	...props
-}: ImageProps & { onFace?(hasFace: boolean): void; noDetection?: boolean }) {
-	const [box, setBox] = useState<{
-		xPercentage: number;
-		yPercentage: number;
-		widthPercentage: number;
-		heightPercentage: number;
-	}>();
+}: ImageProps & { onFace?(hasFace: FaceBox): void; noDetection?: boolean; faceBox?: FaceBox }) {
+	const [box, setBox] = useState<FaceBox | undefined>(faceBox);
 	const [modelsLoaded, setModelsLoaded] = useState(false);
 	const [imageLoaded, setImageLoaded] = useState(false);
 	const imgRef = useRef<HTMLImageElement>(null);
@@ -26,10 +25,11 @@ export default function FaceDetectionImage({
 				await faceapi.nets.tinyFaceDetector.load(MODEL_URL);
 				await faceapi.nets.faceLandmark68Net.load(MODEL_URL);
 				await faceapi.nets.faceRecognitionNet.load(MODEL_URL);
-				setModelsLoaded(true);
 			};
 
-			loadModels();
+			loadModels().then(() => {
+				setModelsLoaded(true);
+			});
 		}
 	}, [noDetection]);
 
@@ -58,10 +58,26 @@ export default function FaceDetectionImage({
 						heightPercentage,
 					});
 					if (onFace) {
-						onFace(true);
+						onFace({
+							xPercentage,
+							yPercentage,
+							widthPercentage,
+							heightPercentage,
+						});
 					}
 				} else if (onFace) {
-					onFace(false);
+					setBox({
+						xPercentage: 10,
+						yPercentage: 10,
+						widthPercentage: 80,
+						heightPercentage: 80,
+					});
+					onFace({
+						xPercentage: 10,
+						yPercentage: 10,
+						widthPercentage: 80,
+						heightPercentage: 80,
+					});
 				}
 			}
 		};

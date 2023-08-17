@@ -7,7 +7,7 @@ import { Box, Modal, ModalClose, Sheet, IconButton, Typography, Button, Textarea
 import Image from "next/image";
 import { useState } from "react";
 
-import { ImageData } from "@/types";
+import type { ImageData } from "@/types";
 interface SlideshowModalProps {
 	images: Array<ImageData>;
 	currentIndex: number | null;

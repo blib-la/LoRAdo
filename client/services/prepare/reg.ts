@@ -3,8 +3,8 @@ import path from "node:path";
 
 import axios from "axios";
 import { createApi } from "unsplash-js";
-import { ApiResponse } from "unsplash-js/dist/helpers/response";
-import { Random } from "unsplash-js/dist/methods/photos/types";
+import type { ApiResponse } from "unsplash-js/dist/helpers/response";
+import type { Random } from "unsplash-js/dist/methods/photos/types";
 
 import { cropImageToFace, loadModels } from "./crop";
 import { sizes } from "./sizes";

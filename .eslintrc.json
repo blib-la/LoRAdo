@@ -38,7 +38,7 @@
     "object-curly-spacing": ["error", "always"],
     "prettier/prettier": "error",
     "arrow-body-style": ["error", "as-needed"],
-    "@typescript-eslint/consistent-type-imports": "off"
+    "@typescript-eslint/consistent-type-imports": "warn"
   },
   "overrides": [
     {

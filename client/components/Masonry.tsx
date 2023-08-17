@@ -1,5 +1,6 @@
 import { Box } from "@mui/joy";
-import { Children, ReactNode } from "react";
+import type { ReactNode } from "react";
+import { Children } from "react";
 
 interface MasonryProps {
 	children: ReactNode;

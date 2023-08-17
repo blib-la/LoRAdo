@@ -1,13 +1,13 @@
 export interface ImageData {
 	id: string;
 	caption: string;
-	data: string;
+	data?: string;
+	src: string;
 	name: string;
-	size: number;
 	width: number;
 	height: number;
-	hasFace?: boolean;
 	uploaded?: boolean;
+	faceBox?: FaceBox;
 }
 
 export interface FormDataModel {
@@ -33,4 +33,11 @@ export interface ImageUpload {
 	src: string;
 	captionPath: string;
 	outputPath: string;
+}
+
+export interface FaceBox {
+	xPercentage: number;
+	yPercentage: number;
+	widthPercentage: number;
+	heightPercentage: number;
 }

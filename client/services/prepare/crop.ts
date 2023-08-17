@@ -2,7 +2,7 @@
 import path from "node:path";
 
 import * as tf from "@tensorflow/tfjs-node";
-import { TResolvedNetInput } from "@vladmandic/face-api";
+import type { TResolvedNetInput } from "@vladmandic/face-api";
 import * as faceApi from "@vladmandic/face-api";
 import sharp from "sharp";
 

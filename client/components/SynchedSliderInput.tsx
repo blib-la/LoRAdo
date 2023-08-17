@@ -1,5 +1,6 @@
 import { Box, FormControl, FormLabel, Slider, Input, FormHelperText } from "@mui/joy";
-import { forwardRef, ChangeEvent, ForwardRefRenderFunction } from "react";
+import type { ChangeEvent, ForwardRefRenderFunction } from "react";
+import { forwardRef } from "react";
 
 interface SyncedSliderInputProps {
 	value: number;

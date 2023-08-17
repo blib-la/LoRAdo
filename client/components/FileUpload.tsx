@@ -1,19 +1,16 @@
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 import { Typography, Sheet, Box } from "@mui/joy";
-import { DragEvent } from "react";
+import { nanoid } from "nanoid";
+import type { DragEvent } from "react";
+
+import type { ImageData } from "@/types";
+import { resizeImage } from "@/utils/traverseFileTree";
 interface FileUploadProps {
 	min: number;
 	ok: number;
 	recommended: number;
 	onDrop(event: DragEvent<HTMLLabelElement>): void;
 	onLoad(imageData: ImageData): void;
-}
-interface ImageData {
-	data: string;
-	name: string;
-	size: number;
-	width: number;
-	height: number;
 }
 export default function FileUpload({ onDrop, onLoad, min, ok, recommended }: FileUploadProps) {
 	return (
@@ -79,15 +76,23 @@ export default function FileUpload({ onDrop, onLoad, min, ok, recommended }: Fil
 							if (file.type.startsWith("image/")) {
 								const reader = new FileReader();
 								reader.onload = event => {
-									const img = new Image();
-									img.src = event.target!.result as string;
-									img.onload = () => {
+									const image = new Image();
+									image.src = event.target!.result as string;
+									image.onload = async () => {
+										const maxWidth = 300;
+										const resizedDataUrl = await resizeImage(
+											image,
+											maxWidth,
+											maxWidth * (1535 / 640) // SDXL max
+										);
 										onLoad({
-											data: event.target!.result as string,
+											id: nanoid(),
+											data: image.src,
+											src: resizedDataUrl,
 											name: file.name,
-											size: file.size,
-											width: img.width,
-											height: img.height,
+											width: image.width,
+											height: image.height,
+											caption: "",
 										});
 									};
 								};

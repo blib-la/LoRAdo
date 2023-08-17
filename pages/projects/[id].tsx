@@ -6,7 +6,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import { Box, IconButton, Table, Textarea } from "@mui/joy";
 import axios from "axios";
 import { globby } from "globby";
-import { GetServerSidePropsContext } from "next";
+import type { GetServerSidePropsContext } from "next";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -15,7 +15,7 @@ import { getDirectories } from "../api/projects";
 import Layout from "@/components/Layout";
 import SlideshowModal from "@/components/SlideshowModal";
 import { getImageDimensions } from "@/services/prepare/utils";
-import { ImageUpload } from "@/types";
+import type { ImageUpload } from "@/types";
 
 export function BasicTable({
 	rows,
@@ -34,7 +34,6 @@ export function BasicTable({
 		<Table aria-label="basic table">
 			<tbody>
 				{rows.map((image, index) => {
-					console.log("");
 					const name = image.src.split("/").pop();
 					return (
 						<tr key={image.src}>
@@ -156,6 +155,7 @@ export default function Project({
 					id: image.src,
 					name: image.src.split("/").pop()!,
 					data: image.src,
+					src: image.src,
 					caption: image.alt,
 					height: image.height,
 					width: image.width,

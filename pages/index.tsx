@@ -14,11 +14,11 @@ import {
 	Switch,
 	Typography,
 } from "@mui/joy";
-import axios, { AxiosError } from "axios";
-import { nanoid } from "nanoid";
-import { GetServerSidePropsContext } from "next";
+import type { AxiosError } from "axios";
+import axios from "axios";
 import { useRouter } from "next/router";
-import { DragEvent, useState } from "react";
+import type { DragEvent } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { getDirectories } from "./api/projects";
@@ -30,7 +30,7 @@ import Masonry from "@/components/Masonry";
 import SlideshowModal from "@/components/SlideshowModal";
 import SyncedSliderInput from "@/components/SynchedSliderInput";
 import { exampleImages } from "@/data/exampleImages";
-import { FormDataModel, ImageData, ImageUpload } from "@/types";
+import type { FaceBox, FormDataModel, ImageData, ImageUpload } from "@/types";
 import { traverseFileTree } from "@/utils/traverseFileTree";
 
 export default function Home({ directories }: { directories: { fullPath: string; id: string }[] }) {
@@ -59,7 +59,7 @@ export default function Home({ directories }: { directories: { fullPath: string;
 	const { push } = useRouter();
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<Error | null>(null);
-	const [images, setImages] = useState<Array<ImageData>>([]);
+	const [images, setImages] = useState<ImageData[]>([]);
 	const [isModalOpen, setModalOpen] = useState(false);
 	const [currentImageIndex, setCurrentImageIndex] = useState<number | null>(null);
 
@@ -105,8 +105,8 @@ export default function Home({ directories }: { directories: { fullPath: string;
 
 			if (item) {
 				// eslint-disable-next-line no-await-in-loop
-				await traverseFileTree(item, (imageData: ImageData) => {
-					setImages(prev => [...prev, { ...imageData, id: nanoid() }]);
+				await traverseFileTree(item, imageData => {
+					setImages(prev => [...prev, imageData]);
 				});
 			}
 		}
@@ -127,30 +127,18 @@ export default function Home({ directories }: { directories: { fullPath: string;
 		);
 	};
 
-	const handleFace = (hasFace: boolean, imageIndex: number) => {
+	const handleFace = (faceBox: FaceBox, imageIndex: number) => {
 		setImages(prevImages =>
-			prevImages.map((image, index) => (index === imageIndex ? { ...image, hasFace } : image))
+			prevImages.map((image, index) => (index === imageIndex ? { ...image, faceBox } : image))
 		);
 	};
 
 	const onSubmit = async (data: Omit<FormDataModel, "files">) => {
 		setLoading(true);
 		setError(null);
-		const formData = new FormData();
-		formData.append("projectName", data.projectName);
-		formData.append("sdxl", data.sdxl.toString());
-		formData.append("checkpoint", data.checkpoint);
-		formData.append("subject", data.subject);
-		formData.append("className", data.className);
-		formData.append("filename", data.filename);
-		formData.append("epochs", data.epochs.toString());
-		formData.append("crop", data.crop.toString());
-		formData.append("sample", data.sample.toString());
-		formData.append("lowVRAM", data.lowVRAM.toString());
-		formData.append("regularisation", data.regularisation.toString());
 
 		try {
-			const response = await axios.post<{ baseDir: string }>("/api/prepare", formData);
+			const response = await axios.post<{ baseDir: string }>("/api/prepare", data);
 
 			const repeats = Math.min(
 				Math.max(Math.ceil(150 / (images.length * (data.crop ? 9 : 1))), 5),
@@ -160,7 +148,7 @@ export default function Home({ directories }: { directories: { fullPath: string;
 			const imagePromises = images.map(async (image, index) => {
 				const counter = index + 1;
 				const imageData = new FormData();
-				const byteCharacters = atob(image.data.split(",")[1]);
+				const byteCharacters = atob(image.data!.split(",")[1]);
 				const byteArrays = [];
 
 				for (let offset = 0; offset < byteCharacters.length; offset += 512) {
@@ -547,10 +535,7 @@ export default function Home({ directories }: { directories: { fullPath: string;
 							recommended={preferredLength}
 							onDrop={handleDrop}
 							onLoad={imageData => {
-								setImages(prev => [
-									...prev,
-									{ ...imageData, id: nanoid(), caption: "" },
-								]);
+								setImages(previousState => [...previousState, imageData]);
 							}}
 						/>
 					</Grid>
@@ -572,8 +557,8 @@ export default function Home({ directories }: { directories: { fullPath: string;
 					<ImageItem
 						key={image.id}
 						image={image}
-						onFace={hasFace => {
-							handleFace(hasFace, index);
+						onFace={faceBox => {
+							handleFace(faceBox, index);
 						}}
 						onRemove={() => {
 							handleRemove(index);
@@ -588,28 +573,13 @@ export default function Home({ directories }: { directories: { fullPath: string;
 				))}
 
 				{images.length === 0 &&
-					exampleImages.map(image => (
-						<ImageItem
-							key={image.id}
-							demo
-							image={{
-								caption: image.caption,
-								id: image.id,
-								data: image.src,
-								hasFace: image.hasFace,
-								width: image.width,
-								height: image.height,
-								name: image.name,
-								size: image.size,
-							}}
-						/>
-					))}
+					exampleImages.map(image => <ImageItem key={image.id} demo image={image} />)}
 			</Masonry>
 		</Layout>
 	);
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export async function getServerSideProps() {
 	const directories = await getDirectories(path.join(process.cwd(), "training"));
 	return {
 		props: {

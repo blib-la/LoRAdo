@@ -16,9 +16,10 @@ import {
 	useTheme,
 } from "@mui/joy";
 import dynamic from "next/dynamic";
-import { ChangeEventHandler, useState } from "react";
+import type { ChangeEventHandler } from "react";
+import { useState } from "react";
 
-import { ImageData } from "@/types";
+import type { FaceBox, ImageData } from "@/types";
 
 const FaceDetectionImage = dynamic(() => import("@/components/FaceDetectionImage"), {
 	ssr: false,
@@ -31,7 +32,7 @@ export interface ImageItemProps {
 	onRemove?: () => void;
 	onSave?: () => void;
 	onOpen?: () => void;
-	onFace?: (hasFace: boolean) => void;
+	onFace?: (faceBox: FaceBox) => void;
 	onCaptionChange?: ChangeEventHandler<HTMLTextAreaElement>;
 }
 
@@ -51,7 +52,6 @@ export function StateIcon({ loading, done }: { loading?: boolean; done?: boolean
 export default function ImageItem({
 	image,
 	demo,
-	upload,
 	modified,
 	onRemove,
 	onSave,
@@ -59,14 +59,14 @@ export default function ImageItem({
 	onFace,
 	onCaptionChange,
 }: ImageItemProps) {
-	const [faceDetection, setFaceDetection] = useState(upload);
+	const [faceDetection, setFaceDetection] = useState(Boolean(image.faceBox));
 
 	const hasGoodSize = Math.min(image.width, image.height) >= 1536;
 
 	return (
 		<Card
 			variant="soft"
-			color={(hasGoodSize && image.hasFace) || upload ? "neutral" : "danger"}
+			color={hasGoodSize && image.faceBox ? "neutral" : "danger"}
 			sx={{
 				breakInside: "avoid",
 				opacity: demo ? 0.25 : undefined,
@@ -79,10 +79,7 @@ export default function ImageItem({
 					<Typography
 						level="title-md"
 						startDecorator={
-							<StateIcon
-								loading={!faceDetection}
-								done={image.uploaded || demo || (upload && !modified)}
-							/>
+							<StateIcon loading={!faceDetection} done={image.uploaded || demo} />
 						}
 						sx={{ mr: 6 }}
 					>
@@ -117,7 +114,6 @@ export default function ImageItem({
 			</div>
 			<CardContent>
 				<div>
-					{!upload && <Typography level="body-xs">Size: {image.size} bytes </Typography>}
 					<Typography level="body-xs">
 						Dimensions: {image.width}x{image.height}
 					</Typography>
@@ -137,8 +133,9 @@ export default function ImageItem({
 				onClick={onOpen}
 			>
 				<FaceDetectionImage
-					noDetection={upload}
-					src={image.data}
+					noDetection={Boolean(image.faceBox)}
+					faceBox={image.faceBox}
+					src={image.src}
 					alt={image.name}
 					width={image.width}
 					height={image.height}
@@ -146,10 +143,10 @@ export default function ImageItem({
 						width: "100%",
 						height: "auto",
 					}}
-					onFace={hasFace => {
+					onFace={faceBox => {
 						setFaceDetection(true);
 						if (onFace) {
-							onFace(hasFace);
+							onFace(faceBox);
 						}
 					}}
 				/>

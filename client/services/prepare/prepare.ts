@@ -4,7 +4,7 @@ import path from "node:path";
 import { cropImageToFace, loadModels } from "./crop";
 import { ensureDirExists, getClosestSize, getImageDimensions } from "./utils";
 
-import { ImageUpload } from "@/types";
+import type { ImageUpload } from "@/types";
 
 export async function prepareImage({
 	crop = false,
