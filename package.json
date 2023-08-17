@@ -27,6 +27,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.3",
     "@mui/joy": "^5.0.0-beta.2",
+    "@mui/lab": "^5.0.0-alpha.140",
     "@mui/material": "^5.14.5",
     "@tensorflow/tfjs": "^4.10.0",
     "@tensorflow/tfjs-backend-wasm": "^4.10.0",

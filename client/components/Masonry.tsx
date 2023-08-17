@@ -1,30 +1,14 @@
-import { Box } from "@mui/joy";
+import MuiMasonry from "@mui/lab/Masonry";
 import type { ReactNode } from "react";
-import { Children } from "react";
 
 interface MasonryProps {
-	children: ReactNode;
-	gap?: number;
+	children: NonNullable<ReactNode>;
 }
 
-export default function Masonry({ children, gap = 2 }: MasonryProps) {
+export default function Masonry({ children }: MasonryProps) {
 	return (
-		<Box
-			sx={{
-				mt: 4,
-				columnCount: { xs: 1, sm: 2, md: 3, lg: 4 },
-				columnGap: gap,
-			}}
-		>
-			{Children.map(
-				children,
-				(child, index) =>
-					child && (
-						<Box key={index} sx={{ mb: gap }}>
-							{child}
-						</Box>
-					)
-			)}
-		</Box>
+		<MuiMasonry columns={{ xs: 1, sm: 2, md: 3, lg: 4 }} sx={{ mt: 2, overflow: "hidden" }}>
+			{children}
+		</MuiMasonry>
 	);
 }
