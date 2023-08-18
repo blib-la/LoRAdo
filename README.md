@@ -84,7 +84,7 @@ The prepared folder
 
 1. **Prerequisites:**
 
-    - Ensure you have `node.js (v18.25.0)` installed. If not, you can download it from
+    - Ensure you have `node.js (v18.5.0)` installed. If not, you can download it from
       [Node.js official site](https://nodejs.org/). ([use a node version manager](#node-version-managers)) to quickly switch to a different version.
     - There is an open issue with tensorflow. Please make sure to install v18 (not above). The
       recommended version can be found in [.nvmrc](.nvmrc)
