@@ -9,15 +9,15 @@ https://github.com/kohya-ss/sd-scripts.)
 
 <!-- toc -->
 
-- [Intro](#intro)
-- [Why?](#why)
-- [Screenshots](#screenshots)
-- [Features](#features)
-- [Getting Started with LoRAdo](#getting-started-with-lorado)
-- [Update LoRAdo](#update-lorado)
-- [Using LoRAdo](#using-lorado)
-- [How LoRAdo Works](#how-lorado-works)
-- [Generation examples](#generation-examples)
+-   [Intro](#intro)
+-   [Why?](#why)
+-   [Screenshots](#screenshots)
+-   [Features](#features)
+-   [Getting Started with LoRAdo](#getting-started-with-lorado)
+-   [Update LoRAdo](#update-lorado)
+-   [Using LoRAdo](#using-lorado)
+-   [How LoRAdo Works](#how-lorado-works)
+-   [Generation examples](#generation-examples)
 
 <!-- tocstop -->
 
@@ -114,6 +114,7 @@ The prepared folder
 ```bash
 git fetch origin
 git reset --hard origin/main
+npm install
 ```
 
 ## Using LoRAdo
