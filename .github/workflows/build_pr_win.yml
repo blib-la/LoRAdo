@@ -1,4 +1,4 @@
-name: Build Branch on Pull Request
+name: Build Branch on Pull Request Win
 
 on:
   pull_request:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   build-win:
-    name: Run Tests
+    name: Run Build
     runs-on: windows-2022
 
     steps:
