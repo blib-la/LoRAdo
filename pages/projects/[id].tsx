@@ -1,105 +1,18 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-import DeleteIcon from "@mui/icons-material/Delete";
-import SaveIcon from "@mui/icons-material/Save";
-import { Box, IconButton, Table, Textarea } from "@mui/joy";
 import axios from "axios";
 import { globby } from "globby";
 import type { GetServerSidePropsContext } from "next";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { getDirectories } from "../api/projects";
 
 import Layout from "@/components/Layout";
+import { ProjectsTable } from "@/components/ProjectsTable";
 import SlideshowModal from "@/components/SlideshowModal";
 import { getImageDimensions } from "@/services/prepare/utils";
 import type { ImageUpload } from "@/types";
-
-export function BasicTable({
-	rows,
-	onCaptionChange,
-	onRemove,
-	onSave,
-	onClick,
-}: {
-	rows: ImageUpload[];
-	onCaptionChange(id: string, value: string): void;
-	onSave(image: ImageUpload): void;
-	onRemove(image: ImageUpload): void;
-	onClick(index: number): void;
-}) {
-	return (
-		<Table aria-label="basic table">
-			<tbody>
-				{rows.map((image, index) => {
-					const name = image.src.split("/").pop();
-					return (
-						<tr key={image.src}>
-							<Box component="td" sx={{ width: 116 }}>
-								<Box
-									component="button"
-									sx={{ p: 0, bgcolor: "transparent", border: 0 }}
-									onClick={() => {
-										onClick(index);
-									}}
-								>
-									<Image
-										src={image.src}
-										alt={image.alt}
-										height={image.height}
-										width={image.width}
-										style={{
-											height: 100,
-											width: 100,
-											objectFit: "contain",
-											objectPosition: "center",
-										}}
-									/>
-								</Box>
-							</Box>
-							<Box component="td" sx={{ width: 200 }}>
-								{name}
-							</Box>
-							<td>
-								<Textarea
-									value={image.alt}
-									onChange={event => {
-										onCaptionChange(image.src, event.target.value);
-									}}
-								/>
-							</td>
-							<Box component="td" sx={{ width: 56 }}>
-								{image.modified ? (
-									<IconButton
-										variant="solid"
-										color="warning"
-										onClick={() => {
-											onSave(image);
-										}}
-									>
-										<SaveIcon />
-									</IconButton>
-								) : (
-									<IconButton
-										variant="solid"
-										color="danger"
-										onClick={() => {
-											onRemove(image);
-										}}
-									>
-										<DeleteIcon />
-									</IconButton>
-								)}
-							</Box>
-						</tr>
-					);
-				})}
-			</tbody>
-		</Table>
-	);
-}
 
 export default function Project({
 	directories,
@@ -192,7 +105,7 @@ export default function Project({
 				}}
 			/>
 
-			<BasicTable
+			<ProjectsTable
 				rows={uploads}
 				onClick={openModal}
 				onCaptionChange={(id, value) => {
