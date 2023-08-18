@@ -83,8 +83,8 @@ The prepared folder
 
 1. **Prerequisites:**
 
-    - Ensure you have `node.js (v18.17.1)` installed. If not, you can download it from
-      [Node.js official site](https://nodejs.org/).
+    - Ensure you have `node.js (v18.25.0)` installed. If not, you can download it from
+      [Node.js official site](https://nodejs.org/). ([use a node version manager](#node-version-managers)) to quickly switch to a different version.
     - There is an open issue with tensorflow. Please make sure to install v18 (not above). The
       recommended version can be found in [.nvmrc](.nvmrc)
     - If there is a problem with tensorflow, please check
@@ -178,3 +178,23 @@ tool/approach
 **Feedback and Support:** Encountered an issue or have a suggestion? Join our
 [Discord community](https://discord.com/invite/m3TBB9XEkb) or open an issue on GitHub. We'd love to
 hear from you!
+
+## Node Version Managers
+
+Node.js has a [list of alternative installation options](https://nodejs.org/en/download/package-manager#nvm).
+
+**Cross Platform**
+
+- [fnm](https://github.com/Schniz/fnm)
+
+**Windows**
+
+- [nvm-windows](https://github.com/coreybutler/nvm-windows)
+- [nodist](https://github.com/marcelklehr/nodist)
+- [nvs](https://github.com/jasongin/nvs)
+
+**macOS/Linux**
+
+- [nvm](https://github.com/nvm-sh/nvm)
+- [n](https://github.com/tj/n)
+

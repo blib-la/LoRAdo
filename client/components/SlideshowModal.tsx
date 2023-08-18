@@ -105,7 +105,7 @@ export default function SlideshowModal({
 								}}
 							>
 								<Image
-									src={currentImage.data}
+									src={currentImage.data ?? currentImage.src}
 									alt={`Image ${currentIndex}`}
 									width={currentImage.width}
 									height={currentImage.height}
@@ -118,7 +118,6 @@ export default function SlideshowModal({
 								/>
 							</Box>
 							<Typography level="body-sm" component="figcaption" sx={{ mb: 4 }}>
-								{currentImage.name} - Size: {currentImage.size} bytes | Dimensions:{" "}
 								{currentImage.width}x{currentImage.height}
 							</Typography>
 							<Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
