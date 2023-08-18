@@ -1,9 +1,23 @@
-import { readFile } from "fs/promises";
+import { createReadStream } from "fs";
 import path from "node:path";
-import process from "node:process";
 
 import * as fileType from "file-type";
 import type { NextApiRequest, NextApiResponse } from "next";
+import sharp from "sharp";
+
+async function streamOptimizedImage(filePath: string, response: NextApiResponse) {
+	const readStream = createReadStream(filePath);
+
+	// Optimize the image on the fly
+	const transformer = sharp().resize(1080).jpeg({ quality: 80 });
+
+	readStream.pipe(transformer).pipe(response);
+
+	// Deduce the MIME type and set the header
+	const bufferChunk = readStream.read(4100) || Buffer.alloc(0);
+	const type = await fileType.fileTypeFromBuffer(bufferChunk);
+	response.setHeader("Content-Type", type?.mime || "application/octet-stream");
+}
 
 export default async function handler(request: NextApiRequest, response: NextApiResponse) {
 	switch (request.method) {
@@ -11,42 +25,15 @@ export default async function handler(request: NextApiRequest, response: NextApi
 			try {
 				const args = request.query.args as string[];
 				const filePath = path.join(process.cwd(), "training", ...args);
-				const fileBuffer = await readFile(filePath);
 
-				if (!fileBuffer) {
-					response.status(404).send({ message: "File not found." });
-					return;
-				}
-
-				const type = await fileType.fileTypeFromBuffer(fileBuffer);
-
-				if (!type) {
-					response.status(403).send({ message: "File type could not be determined." });
-					return;
-				}
-
-				switch (type.mime) {
-					case "image/jpeg":
-					case "image/png":
-						response.setHeader("Content-Type", type.mime);
-						response.status(200).send(fileBuffer);
-						break;
-					default:
-						response.status(403).send({ message: "File type not allowed." });
-				}
+				// Stream and optimize the image directly
+				await streamOptimizedImage(filePath, response);
 			} catch (error) {
-				if (error instanceof Error) {
-					if ("code" in error && error.code === "ENOENT") {
-						response.status(404).send({ message: "File not found." });
-					} else {
-						response.status(500).send({ message: error.message });
-					}
-				} else {
-					response.status(500).send({ message: "An unexpected error occurred." });
-				}
+				response.status(500).send({ message: "An unexpected error occurred." });
 			}
 
 			break;
+
 		default:
 			response.setHeader("Allow", ["GET"]);
 			response.status(405).send({ message: "Method Not Allowed." });
