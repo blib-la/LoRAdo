@@ -11,7 +11,7 @@ on:
 
 jobs:
   build-win:
-    name: Run Build
+    name: Run Build Win
     runs-on: windows-2022
 
     steps:

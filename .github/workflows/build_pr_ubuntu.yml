@@ -11,7 +11,7 @@ on:
 
 jobs:
   build-unix:
-    name: Run Build
+    name: Run Build Ubuntu
     runs-on: ubuntu-20.04
 
     steps:
