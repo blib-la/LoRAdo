@@ -111,11 +111,21 @@ The prepared folder
 
 ## Update LoRAdo
 
-```bash
-git fetch origin
-git reset --hard origin/main
-npm install
-```
+1. **Stop LoRAdo if it's already running**
+
+    - CTRL+C to terminate the process in the terminal
+
+2. **Update the code and dependencies:**
+
+    ```bash
+    git fetch origin
+    git reset --hard origin/main
+    npm install
+    ```
+
+3. **Run the App:**
+
+    - Execute the commands as shown under _Running the App_ above
 
 ## Using LoRAdo
 
