@@ -1,3 +1,12 @@
+# [0.1.0-alpha.8](https://github.com/failfa-st/LoRAdo/compare/v0.1.0-alpha.1...v0.1.0-alpha.8) (2023-08-18)
+
+
+### Features
+
+* **upload:** implement better image loading ([#11](https://github.com/failfa-st/LoRAdo/issues/11)) ([1a8958a](https://github.com/failfa-st/LoRAdo/commit/1a8958aebddcc636e9b70347eb57ee21dd6fbc6c))
+
+
+
 # 0.1.0-alpha.7 (2023-08-17)
 
 
